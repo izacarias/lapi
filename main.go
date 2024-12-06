@@ -16,14 +16,11 @@ func main() {
 
 	router := gin.Default()
 
-	// Adding routes
+	// Adding Ping routes
+	routes.PingRoute(router)
+	// Adding Zone routes
 	routes.ZoneRoute(router)
 
-	router.GET("/", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"data": "Hello from Gin-gonic & mongoDB",
-		})
-	})
-
+	// Running the server
 	router.Run(":8080")
 }

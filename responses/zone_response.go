@@ -1,6 +1,6 @@
 package responses
 
-type ZoneInfo struct {
+type ZoneResponse struct {
 
 	// The number of access points within the zone
 	NumberOfAccessPoints int32 `json:"numberOfAccessPoints"`
