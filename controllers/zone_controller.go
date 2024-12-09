@@ -17,6 +17,14 @@ import (
 
 var zoneCollection *mongo.Collection = configs.GetCollection(configs.DB, "zones")
 
+// GetZone godoc
+// @Router /queries/zones [get]
+// @Tags location
+// @Summary Query the information about one or more specific zones or a list of zones.
+// @Description The GET method is used to query the information about one or more specific zones or a list of zones.
+// @Id zonesGET
+// @Produce json
+// success 200 {array} ZoneResponse
 func GetZone() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var zone models.Zone

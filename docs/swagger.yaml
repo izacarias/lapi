@@ -1,0 +1,30 @@
+basePath: /location/v3/
+host: localhost:8080
+info:
+  contact:
+    email: support@swagger.io
+    name: API Support
+    url: http://www.swagger.io/support
+  description: This is a sample server server.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Gin Swagger Example API
+  version: "2.0"
+paths:
+  /queries/zones:
+    get:
+      description: The GET method is used to query the information about one or more
+        specific zones or a list of zones.
+      operationId: zonesGET
+      produces:
+      - application/json
+      responses: {}
+      summary: Query the information about one or more specific zones or a list of
+        zones.
+      tags:
+      - location
+schemes:
+- http
+swagger: "2.0"
