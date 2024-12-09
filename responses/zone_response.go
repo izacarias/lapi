@@ -1,6 +1,8 @@
 package responses
 
 type ZoneResponse struct {
+	// Identifier of zone
+	ZoneId string `json:"zoneId"`
 
 	// The number of access points within the zone
 	NumberOfAccessPoints int32 `json:"numberOfAccessPoints"`
@@ -13,7 +15,4 @@ type ZoneResponse struct {
 
 	// Self referring URL
 	ResourceURL string `json:"resourceURL"`
-
-	// Identifier of zone
-	ZoneId string `json:"zoneId"`
 }
