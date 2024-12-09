@@ -31,8 +31,12 @@ func GetZone() gin.HandlerFunc {
 		err := zoneCollection.FindOne(ctx, filter).Decode(&zone)
 
 		if err != nil {
+			if err == mongo.ErrNoDocuments {
+				c.JSON(http.StatusNotFound, gin.H{"error": "zone not found"})
+				return
+			}
 			log.Printf("error getting zone %s: %v", zoneId, err)
-			c.JSON(http.StatusInternalServerError, gin.H{"error": "Error fetching zone"})
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "error fetching zone"})
 			return
 		}
 		zr := responses.ZoneResponse{
