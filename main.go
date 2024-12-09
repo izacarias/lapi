@@ -21,6 +21,9 @@ func main() {
 	// Adding Zone routes
 	routes.ZoneRoute(router)
 
+	// Adding Swagger routes
+	routes.SwaggerRoute(router)
+
 	// Running the server
 	router.Run(":8080")
 }

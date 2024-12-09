@@ -13,3 +13,14 @@ or
 ```
 docker start CONTAINDER_ID
 ```
+
+# Update Swagger Specifications
+```
+swag init -g main.go --output docs/swagger
+```
+
+or just
+
+```
+
+```
