@@ -7,21 +7,20 @@ import (
 	"github.com/izacarias/lapi/routes"
 )
 
-// @title Gin Swagger Example API
-// @version 2.0
-// @description This is a sample server server.
-// @termsOfService http://swagger.io/terms/
-
-// @contact.name API Support
-// @contact.url http://www.swagger.io/support
-// @contact.email support@swagger.io
-
-// @license.name Apache 2.0
-// @license.url http://www.apache.org/licenses/LICENSE-2.0.html
-
-// @host localhost:8080
-// @BasePath /location/v3/
+// @title ETSI GS MEC 013 - Location API
+// @version 3.1.1
+// @description The ETSI MEC ISG MEC013 Location API described using OpenAPI
+// @contact.name Iulisloi Zacarias
+// @contact.url https://github.com/izacarias
+// @license.name BSD-3-Clause
+// @license.url https://forge.etsi.org/legal-matters
+// @externalDocs.ETSI MEC013 V3.1.1 Location API
+// @externalDocs.https://www.etsi.org/deliver/etsi_gs/MEC/001_099/013/03.01.01_60/gs_mec013v030101p.pdf
+// @tags.name location
 // @schemes http
+// @host localhost:8080
+// @basePath /location/v3/
+
 func main() {
 	// Connect to MongoDB
 	client := configs.ConnectDB()

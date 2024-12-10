@@ -4,19 +4,17 @@
     ],
     "swagger": "2.0",
     "info": {
-        "description": "This is a sample server server.",
-        "title": "Gin Swagger Example API",
-        "termsOfService": "http://swagger.io/terms/",
+        "description": "The ETSI MEC ISG MEC013 Location API described using OpenAPI",
+        "title": "ETSI GS MEC 013 - Location API",
         "contact": {
-            "name": "API Support",
-            "url": "http://www.swagger.io/support",
-            "email": "support@swagger.io"
+            "name": "Iulisloi Zacarias",
+            "url": "https://github.com/izacarias"
         },
         "license": {
-            "name": "Apache 2.0",
-            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+            "name": "BSD-3-Clause",
+            "url": "https://forge.etsi.org/legal-matters"
         },
-        "version": "2.0"
+        "version": "3.1.1"
     },
     "host": "localhost:8080",
     "basePath": "/location/v3/",
@@ -32,7 +30,68 @@
                 ],
                 "summary": "Query the information about one or more specific zones or a list of zones.",
                 "operationId": "zonesGET",
-                "responses": {}
+                "parameters": [
+                    {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "csv",
+                        "description": "Zone ID",
+                        "name": "zoneId",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/responses.ZoneResponse"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        },
+        "/queries/zones/{zoneId}": {
+            "get": {
+                "responses": {
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "responses.ZoneResponse": {
+            "type": "object",
+            "properties": {
+                "numberOfAccessPoints": {
+                    "description": "The number of access points within the zone",
+                    "type": "integer"
+                },
+                "numberOfUnserviceableAccessPoints": {
+                    "description": "Number of inoperable access points within the zone.",
+                    "type": "integer"
+                },
+                "numberOfUsers": {
+                    "description": "The number of users currently on the access point.",
+                    "type": "integer"
+                },
+                "resourceURL": {
+                    "description": "Self referring URL",
+                    "type": "string"
+                },
+                "zoneId": {
+                    "description": "Identifier of zone",
+                    "type": "string"
+                }
             }
         }
     }

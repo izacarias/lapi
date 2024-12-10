@@ -7,17 +7,20 @@ import (
 	"github.com/izacarias/lapi/configs"
 )
 
-var (
-	API_VERSION = "v1"
-	API_PATH    = "api"
-)
+func GetConfigResourceURL() string {
+	resourceURL := fmt.Sprintf("%s/location/%s", configs.GetConfigApiRoot(), configs.GetConfigApiVersion())
+	return resourceURL
+}
+
+func GetConfigQueriesURI() string {
+	return fmt.Sprintf("%s/queries", GetConfigResourceURL())
+}
+
+func GetConfigQueriesZones() string {
+	return fmt.Sprintf("%s/zones", GetConfigQueriesURI())
+}
 
 func ConstructZoneResourceUrl(r *http.Request, zoneId string) string {
-	scheme := "http"
-	if r.TLS != nil {
-		scheme = "https"
-	}
-	host := r.Host
-	zonesURI := configs.GetConfigQueriesZones()
-	return fmt.Sprintf("%s://%s/%s/%s", scheme, host, zonesURI, zoneId)
+	zonesURI := GetConfigQueriesZones()
+	return fmt.Sprintf("%s/%s", zonesURI, zoneId)
 }

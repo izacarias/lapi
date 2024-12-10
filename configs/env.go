@@ -22,15 +22,18 @@ func GetConfigMongoURI() string {
 	return os.Getenv("MONGOURI")
 }
 
-func GetConfigQueriesURI() string {
+func GetConfigApiRoot() string {
 	err := godotenv.Load()
 	if err != nil {
-		log.Printf("error loading .env file. %w", ErrResourceQueryURI)
-		return "location/v3/queries"
+		log.Fatal("error loading .env file. %w", ErrResourceQueryURI)
 	}
-	return os.Getenv("RESOURCEURI")
+	return os.Getenv("APIROOT")
 }
 
-func GetConfigQueriesZones() string {
-	return GetConfigQueriesURI() + "/zones"
+func GetConfigApiVersion() string {
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("error loading .env file. %w", ErrResourceQueryURI)
+	}
+	return os.Getenv("APIVERSION")
 }

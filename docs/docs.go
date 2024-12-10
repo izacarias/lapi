@@ -9,15 +9,13 @@ const docTemplate = `{
     "info": {
         "description": "{{escape .Description}}",
         "title": "{{.Title}}",
-        "termsOfService": "http://swagger.io/terms/",
         "contact": {
-            "name": "API Support",
-            "url": "http://www.swagger.io/support",
-            "email": "support@swagger.io"
+            "name": "Iulisloi Zacarias",
+            "url": "https://github.com/izacarias"
         },
         "license": {
-            "name": "Apache 2.0",
-            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+            "name": "BSD-3-Clause",
+            "url": "https://forge.etsi.org/legal-matters"
         },
         "version": "{{.Version}}"
     },
@@ -35,7 +33,68 @@ const docTemplate = `{
                 ],
                 "summary": "Query the information about one or more specific zones or a list of zones.",
                 "operationId": "zonesGET",
-                "responses": {}
+                "parameters": [
+                    {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "csv",
+                        "description": "Zone ID",
+                        "name": "zoneId",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/responses.ZoneResponse"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        },
+        "/queries/zones/{zoneId}": {
+            "get": {
+                "responses": {
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "responses.ZoneResponse": {
+            "type": "object",
+            "properties": {
+                "numberOfAccessPoints": {
+                    "description": "The number of access points within the zone",
+                    "type": "integer"
+                },
+                "numberOfUnserviceableAccessPoints": {
+                    "description": "Number of inoperable access points within the zone.",
+                    "type": "integer"
+                },
+                "numberOfUsers": {
+                    "description": "The number of users currently on the access point.",
+                    "type": "integer"
+                },
+                "resourceURL": {
+                    "description": "Self referring URL",
+                    "type": "string"
+                },
+                "zoneId": {
+                    "description": "Identifier of zone",
+                    "type": "string"
+                }
             }
         }
     }
@@ -43,12 +102,12 @@ const docTemplate = `{
 
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
-	Version:          "2.0",
+	Version:          "3.1.1",
 	Host:             "localhost:8080",
 	BasePath:         "/location/v3/",
 	Schemes:          []string{"http"},
-	Title:            "Gin Swagger Example API",
-	Description:      "This is a sample server server.",
+	Title:            "ETSI GS MEC 013 - Location API",
+	Description:      "The ETSI MEC ISG MEC013 Location API described using OpenAPI",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 	LeftDelim:        "{{",
