@@ -25,7 +25,7 @@ var zoneCollection *mongo.Collection = configs.GetCollection(configs.DB, "zones"
 // @Id zonesGET
 // @Produce json
 // @Param zoneId query []string false "Zone ID"
-// @Success 200 {object} []responses.ZoneResponse
+// @Success 200 {object} responses.ZoneList
 // @Failure 500
 // @Router /queries/zones [get]
 func ListZones() gin.HandlerFunc {
@@ -55,14 +55,15 @@ func ListZones() gin.HandlerFunc {
 			return
 		}
 
-		var zrs []responses.ZoneResponse
+		var zrs responses.ZoneList
+		zrs.Zone = make([]responses.ZoneInfo, 0)
 		if shouldFilter {
 			for _, zone := range zones {
 				for _, zoneId := range zoneIds {
 					if zone.Id == zoneId {
-						zrs = append(zrs, responses.ZoneResponse{
+						zrs.Zone = append(zrs.Zone, responses.ZoneInfo{
 							ZoneId:                            zone.Id,
-							NumberOfAccessPoints:              0,
+							NumberOfAccessPoints:              int32(zone.CoungAccessPoints()),
 							NumberOfUnserviceableAccessPoints: 0,
 							NumberOfUsers:                     0,
 							ResourceURL:                       utils.ConstructZoneResourceUrl(c.Request, zone.Id),
@@ -72,9 +73,9 @@ func ListZones() gin.HandlerFunc {
 			}
 		} else {
 			for _, zone := range zones {
-				zrs = append(zrs, responses.ZoneResponse{
+				zrs.Zone = append(zrs.Zone, responses.ZoneInfo{
 					ZoneId:                            zone.Id,
-					NumberOfAccessPoints:              0,
+					NumberOfAccessPoints:              int32(zone.CoungAccessPoints()),
 					NumberOfUnserviceableAccessPoints: 0,
 					NumberOfUsers:                     0,
 					ResourceURL:                       utils.ConstructZoneResourceUrl(c.Request, zone.Id),
@@ -92,7 +93,7 @@ func ListZones() gin.HandlerFunc {
 // @Id zoneGetById
 // @Produce json
 // @Param	zoneId	path	string	true	"Zone ID"
-// @Success	200 {object}	responses.ZoneResponse
+// @Success	200 {object}	responses.ZoneInfo
 // @Failure	400	"Bad Request"
 // @Failure	404	"Not found"
 
@@ -120,9 +121,9 @@ func GetZone() gin.HandlerFunc {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "error fetching zone"})
 			return
 		}
-		zr := responses.ZoneResponse{
+		zr := responses.ZoneInfo{
 			ZoneId:                            zone.Id,
-			NumberOfAccessPoints:              0,
+			NumberOfAccessPoints:              int32(zone.CoungAccessPoints()),
 			NumberOfUnserviceableAccessPoints: 0,
 			NumberOfUsers:                     0,
 			ResourceURL:                       utils.ConstructZoneResourceUrl(c.Request, zone.Id),

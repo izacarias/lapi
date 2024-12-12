@@ -1,6 +1,6 @@
 basePath: /location/v3/
 definitions:
-  responses.ZoneResponse:
+  responses.ZoneInfo:
     properties:
       numberOfAccessPoints:
         description: The number of access points within the zone
@@ -17,6 +17,14 @@ definitions:
       zoneId:
         description: Identifier of zone
         type: string
+    type: object
+  responses.ZoneList:
+    properties:
+      zone:
+        description: List of zones
+        items:
+          $ref: '#/definitions/responses.ZoneInfo'
+        type: array
     type: object
 host: localhost:8080
 info:
@@ -49,9 +57,7 @@ paths:
         "200":
           description: OK
           schema:
-            items:
-              $ref: '#/definitions/responses.ZoneResponse'
-            type: array
+            $ref: '#/definitions/responses.ZoneList'
         "500":
           description: Internal Server Error
       summary: Query the information about one or more specific zones or a list of

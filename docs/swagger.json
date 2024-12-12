@@ -46,10 +46,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/responses.ZoneResponse"
-                            }
+                            "$ref": "#/definitions/responses.ZoneList"
                         }
                     },
                     "500": {
@@ -69,7 +66,7 @@
         }
     },
     "definitions": {
-        "responses.ZoneResponse": {
+        "responses.ZoneInfo": {
             "type": "object",
             "properties": {
                 "numberOfAccessPoints": {
@@ -91,6 +88,18 @@
                 "zoneId": {
                     "description": "Identifier of zone",
                     "type": "string"
+                }
+            }
+        },
+        "responses.ZoneList": {
+            "type": "object",
+            "properties": {
+                "zone": {
+                    "description": "List of zones",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/responses.ZoneInfo"
+                    }
                 }
             }
         }

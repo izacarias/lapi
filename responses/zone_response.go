@@ -1,6 +1,6 @@
 package responses
 
-type ZoneResponse struct {
+type ZoneInfo struct {
 	// Identifier of zone
 	ZoneId string `json:"zoneId"`
 
@@ -15,4 +15,9 @@ type ZoneResponse struct {
 
 	// Self referring URL
 	ResourceURL string `json:"resourceURL"`
+}
+
+type ZoneList struct {
+	// List of zones
+	Zone []ZoneInfo `json:"zone,omitempty"`
 }

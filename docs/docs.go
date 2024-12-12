@@ -49,10 +49,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/responses.ZoneResponse"
-                            }
+                            "$ref": "#/definitions/responses.ZoneList"
                         }
                     },
                     "500": {
@@ -72,7 +69,7 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "responses.ZoneResponse": {
+        "responses.ZoneInfo": {
             "type": "object",
             "properties": {
                 "numberOfAccessPoints": {
@@ -94,6 +91,18 @@ const docTemplate = `{
                 "zoneId": {
                     "description": "Identifier of zone",
                     "type": "string"
+                }
+            }
+        },
+        "responses.ZoneList": {
+            "type": "object",
+            "properties": {
+                "zone": {
+                    "description": "List of zones",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/responses.ZoneInfo"
+                    }
                 }
             }
         }
