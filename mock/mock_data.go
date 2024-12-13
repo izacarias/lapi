@@ -5,7 +5,8 @@ import (
 	"log"
 	"time"
 
-	"github.com/izacarias/lapi/models"
+	"github.com/izacarias/lapi/domain/access_point"
+	"github.com/izacarias/lapi/domain/zone"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 )
@@ -30,45 +31,45 @@ func insertAccessPointData(client *mongo.Client) {
 	}
 	if count == 0 {
 		mockData := []interface{}{
-			models.AccessPoint{
+			access_point.AccessPoint{
 				AccessPointId:   "AP1",
-				ConnectionType:  models.CT_WIFI,
-				OperationStatus: models.OS_SERVICEABLE,
+				ConnectionType:  access_point.CT_WIFI,
+				OperationStatus: access_point.OS_SERVICEABLE,
 				NumberOfUsers:   10,
 				Timezone:        "01-01-1970T00:00:00+01:00",
 			},
-			models.AccessPoint{
+			access_point.AccessPoint{
 				AccessPointId:   "AP2",
-				ConnectionType:  models.CT_WIFI,
-				OperationStatus: models.OS_SERVICEABLE,
+				ConnectionType:  access_point.CT_WIFI,
+				OperationStatus: access_point.OS_SERVICEABLE,
 				NumberOfUsers:   2,
 				Timezone:        "01-01-1970T00:00:00+01:00",
 			},
-			models.AccessPoint{
+			access_point.AccessPoint{
 				AccessPointId:   "AP3",
-				ConnectionType:  models.CT_5GNR,
-				OperationStatus: models.OS_SERVICEABLE,
+				ConnectionType:  access_point.CT_5GNR,
+				OperationStatus: access_point.OS_SERVICEABLE,
 				NumberOfUsers:   15,
 				Timezone:        "01-01-1970T00:00:00+01:00",
 			},
-			models.AccessPoint{
+			access_point.AccessPoint{
 				AccessPointId:   "AP4",
-				ConnectionType:  models.CT_5GNR,
-				OperationStatus: models.OS_SERVICEABLE,
+				ConnectionType:  access_point.CT_5GNR,
+				OperationStatus: access_point.OS_SERVICEABLE,
 				NumberOfUsers:   100,
 				Timezone:        "01-01-1970T00:00:00+01:00",
 			},
-			models.AccessPoint{
+			access_point.AccessPoint{
 				AccessPointId:   "AP5",
-				ConnectionType:  models.CT_5GNR,
-				OperationStatus: models.OS_UNSERVICEABLE,
+				ConnectionType:  access_point.CT_5GNR,
+				OperationStatus: access_point.OS_UNSERVICEABLE,
 				NumberOfUsers:   0,
 				Timezone:        "01-01-1970T00:00:00+01:00",
 			},
-			models.AccessPoint{
+			access_point.AccessPoint{
 				AccessPointId:   "AP6",
-				ConnectionType:  models.CT_WIFI,
-				OperationStatus: models.OS_UNSERVICEABLE,
+				ConnectionType:  access_point.CT_WIFI,
+				OperationStatus: access_point.OS_UNSERVICEABLE,
 				NumberOfUsers:   0,
 				Timezone:        "01-01-1970T00:00:00+01:00",
 			},
@@ -97,10 +98,10 @@ func insertZoneData(client *mongo.Client) {
 
 	if count == 0 {
 		mockData := []interface{}{
-			models.Zone{Id: "Zone1", AccessPointsList: []string{"AP1", "AP2"}},
-			models.Zone{Id: "Zone2", AccessPointsList: []string{"AP3", "AP4"}},
-			models.Zone{Id: "Zone3", AccessPointsList: []string{"AP5", "AP6"}},
-			models.Zone{Id: "Zone4", AccessPointsList: []string{"AP1", "AP2", "AP5", "AP6"}},
+			zone.Zone{Id: "Zone1"},
+			zone.Zone{Id: "Zone2"},
+			zone.Zone{Id: "Zone3"},
+			zone.Zone{Id: "Zone4"},
 		}
 
 		_, err := collection.InsertMany(ctx, mockData)

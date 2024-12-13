@@ -1,4 +1,4 @@
-package models
+package access_point
 
 // List of ConnectionType
 const (

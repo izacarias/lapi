@@ -63,7 +63,7 @@ func ListZones() gin.HandlerFunc {
 					if zone.Id == zoneId {
 						zrs.Zone = append(zrs.Zone, responses.ZoneInfo{
 							ZoneId:                            zone.Id,
-							NumberOfAccessPoints:              int32(zone.CoungAccessPoints()),
+							NumberOfAccessPoints:              int32(zone.CountAccessPoints()),
 							NumberOfUnserviceableAccessPoints: 0,
 							NumberOfUsers:                     0,
 							ResourceURL:                       utils.ConstructZoneResourceUrl(c.Request, zone.Id),
@@ -75,7 +75,7 @@ func ListZones() gin.HandlerFunc {
 			for _, zone := range zones {
 				zrs.Zone = append(zrs.Zone, responses.ZoneInfo{
 					ZoneId:                            zone.Id,
-					NumberOfAccessPoints:              int32(zone.CoungAccessPoints()),
+					NumberOfAccessPoints:              int32(zone.CountAccessPoints()),
 					NumberOfUnserviceableAccessPoints: 0,
 					NumberOfUsers:                     0,
 					ResourceURL:                       utils.ConstructZoneResourceUrl(c.Request, zone.Id),
@@ -123,7 +123,7 @@ func GetZone() gin.HandlerFunc {
 		}
 		zr := responses.ZoneInfo{
 			ZoneId:                            zone.Id,
-			NumberOfAccessPoints:              int32(zone.CoungAccessPoints()),
+			NumberOfAccessPoints:              int32(zone.CountAccessPoints()),
 			NumberOfUnserviceableAccessPoints: 0,
 			NumberOfUsers:                     0,
 			ResourceURL:                       utils.ConstructZoneResourceUrl(c.Request, zone.Id),
