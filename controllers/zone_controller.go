@@ -15,73 +15,54 @@ import (
 
 var zoneCollection *mongo.Collection = configs.GetCollection(configs.DB, "zones")
 
-// // ListZones godoc
-// // @Tags location
-// // @Summary Query the information about one or more specific zones or a list of zones.
-// // @Description The GET method is used to query the information about one or more specific zones or a list of zones.
-// // @Id zonesGET
-// // @Produce json
-// // @Param zoneId query []string false "Zone ID"
-// // @Success 200 {object} responses.ZoneList
-// // @Failure 500
-// // @Router /queries/zones [get]
-// func ListZones() gin.HandlerFunc {
-// 	return func(c *gin.Context) {
-// 		var shouldFilter bool
-// 		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-// 		defer cancel()
+// ListZones godoc
+// @Tags location
+// @Summary Query the information about one or more specific zones or a list of zones.
+// @Description The GET method is used to query the information about one or more specific zones or a list of zones.
+// @Id zonesGET
+// @Produce json
+// @Param zoneId query []string false "Zone ID"
+// @Success 200 {object} responses.ZoneList
+// @Failure 500
+// @Router /queries/zones [get]
+func ListZones() gin.HandlerFunc {
+	return func(c *gin.Context) {
 
-// 		// get the zone ids from the query parameters
-// 		zoneIds := c.QueryArray("zoneId")
-// 		if zoneIds != nil {
-// 			zoneIds = strings.Split(zoneIds[0], ",")
-// 			shouldFilter = len(zoneIds) > 0
-// 		}
+		// get the zone ids from the query parameters
+		// zoneIds := c.QueryArray("zoneId")
+		// if zoneIds != nil {
+		// 	zoneIds = strings.Split(zoneIds[0], ",")
+		// }
 
-// 		cursor, err := zoneCollection.Find(ctx, bson.M{})
-// 		if err != nil {
-// 			log.Printf("error getting zones: %v", err)
-// 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Error fetching zones"})
-// 			return
-// 		}
+		zones, err := services.GetAllZones()
 
-// 		var zones []models.Zone
-// 		if err = cursor.All(ctx, &zones); err != nil {
-// 			log.Printf("error decoding zones: %v", err)
-// 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Error fetching zones"})
-// 			return
-// 		}
+		if err != nil {
+			log.Printf("error getting zones: %v", err)
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "error fetching zones"})
+			return
+		}
 
-// 		var zrs responses.ZoneList
-// 		zrs.Zone = make([]responses.ZoneInfo, 0)
-// 		if shouldFilter {
-// 			for _, zone := range zones {
-// 				for _, zoneId := range zoneIds {
-// 					if zone.Id == zoneId {
-// 						zrs.Zone = append(zrs.Zone, responses.ZoneInfo{
-// 							ZoneId:                            zone.Id,
-// 							NumberOfAccessPoints:              int32(zone.CountAccessPoints()),
-// 							NumberOfUnserviceableAccessPoints: 0,
-// 							NumberOfUsers:                     0,
-// 							ResourceURL:                       utils.ConstructZoneResourceUrl(c.Request, zone.Id),
-// 						})
-// 					}
-// 				}
-// 			}
-// 		} else {
-// 			for _, zone := range zones {
-// 				zrs.Zone = append(zrs.Zone, responses.ZoneInfo{
-// 					ZoneId:                            zone.Id,
-// 					NumberOfAccessPoints:              int32(zone.CountAccessPoints()),
-// 					NumberOfUnserviceableAccessPoints: 0,
-// 					NumberOfUsers:                     0,
-// 					ResourceURL:                       utils.ConstructZoneResourceUrl(c.Request, zone.Id),
-// 				})
-// 			}
-// 		}
-// 		c.JSON(http.StatusOK, zrs)
-// 	}
-// }
+		var zoneInfoList = make([]responses.ZoneInfo, 0)
+
+		for _, zone := range zones {
+			zoneInfoList = append(zoneInfoList, responses.ZoneInfo{
+				ZoneId:                            zone.GetId(),
+				NumberOfAccessPoints:              int32(zone.CountAccessPoints()),
+				NumberOfUnserviceableAccessPoints: int32(zone.CountSericeableAccessPoints()),
+				NumberOfUsers:                     int32(zone.CountUsersInZone()),
+				ResourceURL:                       utils.ConstructZoneResourceUrl(c.Request, zone.GetId()),
+			})
+		}
+
+		response := gin.H{
+			"zoneList": {
+				"resourceURL": utils.ConstructZoneResourceUrl(c.Request, ""),
+				"zone":        zoneInfoList,
+			},
+		}
+		c.JSON(http.StatusOK, response)
+	}
+}
 
 // GetZone godoc
 // @Tags location
@@ -93,12 +74,17 @@ var zoneCollection *mongo.Collection = configs.GetCollection(configs.DB, "zones"
 // @Success	200 {object}	responses.ZoneInfo
 // @Failure	400	"Bad Request"
 // @Failure	404	"Not found"
-
 // @Failure	500	"Internal Server Error"
 // @Router /queries/zones/{zoneId} [get]
 func GetZone() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		zoneId := c.Param("id")
+
+		// issue error 400 of zoneId is empty
+		if zoneId == "" {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "zoneId is required"})
+			return
+		}
 
 		zone, err := services.GetZone(zoneId)
 
@@ -117,8 +103,8 @@ func GetZone() gin.HandlerFunc {
 		zr := responses.ZoneInfo{
 			ZoneId:                            zone.GetId(),
 			NumberOfAccessPoints:              int32(zone.CountAccessPoints()),
-			NumberOfUnserviceableAccessPoints: 0,
-			NumberOfUsers:                     0,
+			NumberOfUnserviceableAccessPoints: int32(zone.CountSericeableAccessPoints()),
+			NumberOfUsers:                     int32(zone.CountUsersInZone()),
 			ResourceURL:                       utils.ConstructZoneResourceUrl(c.Request, zone.GetId()),
 		}
 		// TODO: Process Zone Information here before returning

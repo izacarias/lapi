@@ -43,6 +43,49 @@ func GetZone(zoneId string) (*Zone, error) {
 
 	zone := NewZone()
 	zone.SetId(z.ZoneId)
+	// add access points to the zone
+	for _, apId := range z.AccessPoints {
+		log.Printf("adding access point %v to zone %v", apId, zoneId)
+		ap, err := GetAccessPoint(apId)
+		if err != nil {
+			log.Printf("error getting access point: %v", err)
+		}
+		zone.AddAccessPoint(*ap)
+	}
 
 	return zone, nil
+}
+
+func GetAllZones() ([]Zone, error) {
+	zones := make([]Zone, 0)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	cursor, err := zoneCollection.Find(ctx, bson.M{})
+	if err != nil {
+		log.Printf("error getting zones: %v", err)
+		return nil, err
+	}
+
+	var zonesDb []ZoneMongo
+	if err = cursor.All(ctx, &zonesDb); err != nil {
+		log.Printf("error decoding zones: %v", err)
+		return nil, err
+	}
+	// iterate over all elements in zoneDb and create a Zone object
+	for _, z := range zonesDb {
+		zone := NewZone()
+		zone.SetId(z.ZoneId)
+		// add access points to the zone
+		for _, apId := range z.AccessPoints {
+			log.Printf("adding access point %v to zone %v", apId, z.ZoneId)
+			ap, err := GetAccessPoint(apId)
+			if err != nil {
+				log.Printf("error getting access point: %v", err)
+			}
+			zone.AddAccessPoint(*ap)
+		}
+		zones = append(zones, *zone)
+	}
+	return zones, nil
 }

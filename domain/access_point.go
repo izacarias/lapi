@@ -1,5 +1,7 @@
 package domain
 
+import "errors"
+
 // List of ConnectionType
 const (
 	CT_LTE     ConnectionType = "LTE"
@@ -24,20 +26,68 @@ type OperationStatus string
 
 type AccessPoint struct {
 	// Identifier of access point.
-	AccessPointId string
+	id               string
+	connection_type  ConnectionType
+	operation_status OperationStatus
+	time_zone        string
+	// list of users connected to the AP
+	users []User
+}
 
-	// LocationInfo LocationInfo `bson:"locationInfo,omitempty,inline"`
+var (
+	ErrAccessPointNotFound = errors.New("access point not found")
+)
 
-	ConnectionType ConnectionType `bson:"connection_type"`
+func NewAccessPoint() *AccessPoint {
+	return &AccessPoint{
+		id:               "",
+		connection_type:  CT_UNKNOWN,
+		operation_status: OS_UNKNOWN,
+		time_zone:        "",
+	}
+}
 
-	OperationStatus OperationStatus `bson:"operation_status"`
+// SetId : Set the id of the access point
+func (ap *AccessPoint) SetId(id string) {
+	ap.id = id
+}
 
-	// Number of users currently on the access point.
-	NumberOfUsers int32 `bson:"number_users"`
+func (ap *AccessPoint) GetId() string {
+	return ap.id
+}
 
-	// Time zone of access point.
-	Timezone string `bson:"timezone,omitempty"`
+// SetConnectionType : Set the connection type of the access point
+func (ap *AccessPoint) SetConnectionType(ct ConnectionType) {
+	ap.connection_type = ct
+}
 
-	// Interest realm of access point.
-	// InterestRealm string `json:"interestRealm,omitempty"`
+func (ap *AccessPoint) GetConnectionType() ConnectionType {
+	return ap.connection_type
+}
+
+// SetOperationStatus : Set the operation status of the access point
+func (ap *AccessPoint) SetOperationStatus(os OperationStatus) {
+	ap.operation_status = os
+}
+
+func (ap *AccessPoint) GetOperationStatus() OperationStatus {
+	return ap.operation_status
+}
+
+// SetTimeZone : Set the time zone of the access point
+func (ap *AccessPoint) SetTimeZone(tz string) {
+	ap.time_zone = tz
+}
+
+func (ap *AccessPoint) GetTimeZone() string {
+	return ap.time_zone
+}
+
+// AddUser : Add a user to the access point
+func (ap *AccessPoint) AddUser(user *User) {
+	ap.users = append(ap.users, *user)
+}
+
+func (ap *AccessPoint) CountUsers() int {
+	return len(ap.users)
 }

@@ -13,7 +13,7 @@ import (
 func InsertMockData(client *mongo.Client) {
 	// Insert mock data
 	insertZoneData(client)
-	//insertAccessPointData(client)
+	insertAccessPointData(client)
 
 }
 
@@ -58,69 +58,55 @@ func insertZoneData(client *mongo.Client) {
 	}
 }
 
-// func insertAccessPointData(client *mongo.Client) {
-// 	collectionName := "access_points"
-// 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-// 	defer cancel()
-// 	// Get the Collection of Zones
-// 	collection := client.Database("lapi").Collection(collectionName)
-// 	// Check if the collection is empty
-// 	count, err := collection.CountDocuments(ctx, bson.M{})
-// 	if err != nil {
-// 		log.Fatal(err)
-// 	}
-// 	if count == 0 {
-// 		mockData := []interface{}{
-// 			access_point.AccessPoint{
-// 				AccessPointId:   "AP1",
-// 				ConnectionType:  access_point.CT_WIFI,
-// 				OperationStatus: access_point.OS_SERVICEABLE,
-// 				NumberOfUsers:   10,
-// 				Timezone:        "01-01-1970T00:00:00+01:00",
-// 			},
-// 			access_point.AccessPoint{
-// 				AccessPointId:   "AP2",
-// 				ConnectionType:  access_point.CT_WIFI,
-// 				OperationStatus: access_point.OS_SERVICEABLE,
-// 				NumberOfUsers:   2,
-// 				Timezone:        "01-01-1970T00:00:00+01:00",
-// 			},
-// 			access_point.AccessPoint{
-// 				AccessPointId:   "AP3",
-// 				ConnectionType:  access_point.CT_5GNR,
-// 				OperationStatus: access_point.OS_SERVICEABLE,
-// 				NumberOfUsers:   15,
-// 				Timezone:        "01-01-1970T00:00:00+01:00",
-// 			},
-// 			access_point.AccessPoint{
-// 				AccessPointId:   "AP4",
-// 				ConnectionType:  access_point.CT_5GNR,
-// 				OperationStatus: access_point.OS_SERVICEABLE,
-// 				NumberOfUsers:   100,
-// 				Timezone:        "01-01-1970T00:00:00+01:00",
-// 			},
-// 			access_point.AccessPoint{
-// 				AccessPointId:   "AP5",
-// 				ConnectionType:  access_point.CT_5GNR,
-// 				OperationStatus: access_point.OS_UNSERVICEABLE,
-// 				NumberOfUsers:   0,
-// 				Timezone:        "01-01-1970T00:00:00+01:00",
-// 			},
-// 			access_point.AccessPoint{
-// 				AccessPointId:   "AP6",
-// 				ConnectionType:  access_point.CT_WIFI,
-// 				OperationStatus: access_point.OS_UNSERVICEABLE,
-// 				NumberOfUsers:   0,
-// 				Timezone:        "01-01-1970T00:00:00+01:00",
-// 			},
-// 		}
+func insertAccessPointData(client *mongo.Client) {
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+	// Get the Collection of Zones
+	collection := client.Database("lapi").Collection("access_points")
+	// Check if the collection is empty
+	count, err := collection.CountDocuments(ctx, bson.M{})
+	if err != nil {
+		log.Fatal(err)
+	}
 
-// 		_, err := collection.InsertMany(ctx, mockData)
-// 		if err != nil {
-// 			log.Fatal(err)
-// 		}
-// 		log.Printf("inserted mock data into the %s collection", collectionName)
-// 	} else {
-// 		log.Printf("%s collection is not empty, skipping mock data insertion", collectionName)
-// 	}
-// }
+	if count == 0 {
+		mockData := []interface{}{
+			domain.AccessPointMongo{
+				ApId:            "ap1",
+				ConnectionType:  string(domain.CT_WIFI),
+				OperationStatus: string(domain.OS_SERVICEABLE),
+				Users:           []string{"user1", "user2"},
+				Timezone:        "01-01-1970T00:00:00+01:00",
+			},
+			domain.AccessPointMongo{
+				ApId:            "ap2",
+				ConnectionType:  string(domain.CT_WIFI),
+				OperationStatus: string(domain.OS_SERVICEABLE),
+				Users:           []string{"user3", "user4"},
+				Timezone:        "01-01-1970T00:00:00+01:00",
+			},
+			domain.AccessPointMongo{
+				ApId:            "ap3",
+				ConnectionType:  string(domain.CT_5GNR),
+				OperationStatus: string(domain.OS_SERVICEABLE),
+				Users:           []string{"user5", "user6"},
+				Timezone:        "01-01-1970T00:00:00+01:00",
+			},
+			domain.AccessPointMongo{
+				ApId:            "ap4",
+				ConnectionType:  string(domain.CT_5GNR),
+				OperationStatus: string(domain.OS_UNSERVICEABLE),
+				Users:           []string{"user7", "user8"},
+				Timezone:        "01-01-1970T00:00:00+01:00",
+			},
+		}
+
+		_, err := collection.InsertMany(ctx, mockData)
+		if err != nil {
+			log.Fatal(err)
+		}
+		log.Println("Inserted mock data into the access_points collection")
+	} else {
+		log.Println("Access Points collection is not empty, skipping mock data insertion")
+	}
+}

@@ -39,3 +39,21 @@ func (z *Zone) AddAccessPoint(ap AccessPoint) {
 func (z *Zone) CountAccessPoints() int {
 	return len(z.accessPoints)
 }
+
+func (z *Zone) CountSericeableAccessPoints() int {
+	count := 0
+	for _, ap := range z.accessPoints {
+		if ap.GetOperationStatus() == OS_SERVICEABLE {
+			count++
+		}
+	}
+	return count
+}
+
+func (z *Zone) CountUsersInZone() int {
+	count := 0
+	for _, ap := range z.accessPoints {
+		count += ap.CountUsers()
+	}
+	return count
+}

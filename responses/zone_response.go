@@ -18,6 +18,8 @@ type ZoneInfo struct {
 }
 
 type ZoneList struct {
-	// List of zones
-	Zone []ZoneInfo `json:"zone,omitempty"`
+	ZoneList struct {
+		ResourceURL string     `json:"resourceURL"`
+		Zone        []ZoneInfo `json:"zone"`
+	} `json:"zoneList"`
 }
