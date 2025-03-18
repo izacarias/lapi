@@ -1,4 +1,4 @@
-package access_point
+package domain
 
 // List of ConnectionType
 const (
@@ -24,7 +24,7 @@ type OperationStatus string
 
 type AccessPoint struct {
 	// Identifier of access point.
-	AccessPointId string `bson:"id"`
+	AccessPointId string
 
 	// LocationInfo LocationInfo `bson:"locationInfo,omitempty,inline"`
 

@@ -6,8 +6,9 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/izacarias/lapi/configs"
-	"github.com/izacarias/lapi/domain/zone_association"
+	"github.com/izacarias/lapi/domain"
 	"github.com/izacarias/lapi/responses"
+	"github.com/izacarias/lapi/services"
 	"github.com/izacarias/lapi/utils"
 	"go.mongodb.org/mongo-driver/mongo"
 )
@@ -99,23 +100,26 @@ func GetZone() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		zoneId := c.Param("id")
 
-		zas = zone_association.NewZoneAssociation(zoneId)
+		zone, err := services.GetZone(zoneId)
 
 		if err != nil {
-			if err == mongo.ErrNoDocuments {
+			log.Printf("error getting zone %s: %v", zoneId, err)
+
+			if err == domain.ErrZoneNotFound {
 				c.JSON(http.StatusNotFound, gin.H{"error": "zone not found"})
 				return
 			}
-			log.Printf("error getting zone %s: %v", zoneId, err)
+
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "error fetching zone"})
 			return
 		}
+
 		zr := responses.ZoneInfo{
-			ZoneId:                            zone.Id,
+			ZoneId:                            zone.GetId(),
 			NumberOfAccessPoints:              int32(zone.CountAccessPoints()),
 			NumberOfUnserviceableAccessPoints: 0,
 			NumberOfUsers:                     0,
-			ResourceURL:                       utils.ConstructZoneResourceUrl(c.Request, zone.Id),
+			ResourceURL:                       utils.ConstructZoneResourceUrl(c.Request, zone.GetId()),
 		}
 		// TODO: Process Zone Information here before returning
 		c.JSON(http.StatusOK, zr)
