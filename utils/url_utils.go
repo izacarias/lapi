@@ -24,3 +24,8 @@ func ConstructZoneResourceUrl(r *http.Request, zoneId string) string {
 	zonesURI := GetConfigQueriesZones()
 	return fmt.Sprintf("%s/%s", zonesURI, zoneId)
 }
+
+func ConstructZoneListResourceUrl(r *http.Request) string {
+	zonesURI := GetConfigQueriesZones()
+	return fmt.Sprintf("%s", zonesURI)
+}

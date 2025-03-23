@@ -53,11 +53,25 @@ func ListZones() gin.HandlerFunc {
 				ResourceURL:                       utils.ConstructZoneResourceUrl(c.Request, zone.GetId()),
 			})
 		}
-
-		response := gin.H{
-			"zoneList": {
-				"resourceURL": utils.ConstructZoneResourceUrl(c.Request, ""),
-				"zone":        zoneInfoList,
+		// Sample output
+		// {
+		// 	"zoneList": {
+		// 	  "resourceURL": "string",
+		// 	  "zone": [
+		// 		{
+		// 		  "numberOfAccessPoints": 0,
+		// 		  "numberOfUnserviceableAccessPoints": 0,
+		// 		  "numberOfUsers": 0,
+		// 		  "resourceURL": "string",
+		// 		  "zoneId": "string"
+		// 		}
+		// 	  ]
+		// 	}
+		// }
+		response := responses.ZoneList{
+			ZoneList: responses.ZoneInfoList{
+				ResourceURL: utils.ConstructZoneListResourceUrl(c.Request),
+				Zone:        zoneInfoList,
 			},
 		}
 		c.JSON(http.StatusOK, response)

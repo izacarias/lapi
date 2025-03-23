@@ -17,9 +17,11 @@ type ZoneInfo struct {
 	ResourceURL string `json:"resourceURL"`
 }
 
+type ZoneInfoList struct {
+	ResourceURL string     `json:"resourceURL"`
+	Zone        []ZoneInfo `json:"zone"`
+}
+
 type ZoneList struct {
-	ZoneList struct {
-		ResourceURL string     `json:"resourceURL"`
-		Zone        []ZoneInfo `json:"zone"`
-	} `json:"zoneList"`
+	ZoneList ZoneInfoList `json:"zoneList"`
 }
