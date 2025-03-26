@@ -7,4 +7,5 @@ import (
 
 func ApRoute(router *gin.Engine) {
 	router.GET("location/v3/queries/zones/:id/accessPoints", controllers.ListAccessPoints())
+	router.GET("location/v3/queries/zones/:id/accessPoints/:apId", controllers.GetAccessPoint())
 }
