@@ -5,15 +5,11 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/izacarias/lapi/configs"
 	"github.com/izacarias/lapi/domain"
 	"github.com/izacarias/lapi/responses"
 	"github.com/izacarias/lapi/services"
 	"github.com/izacarias/lapi/utils"
-	"go.mongodb.org/mongo-driver/mongo"
 )
-
-var zoneCollection *mongo.Collection = configs.GetCollection(configs.DB, "zones")
 
 // ListZones godoc
 // @Tags location
@@ -50,27 +46,12 @@ func ListZones() gin.HandlerFunc {
 				NumberOfAccessPoints:              int32(zone.CountAccessPoints()),
 				NumberOfUnserviceableAccessPoints: int32(zone.CountSericeableAccessPoints()),
 				NumberOfUsers:                     int32(zone.CountUsersInZone()),
-				ResourceURL:                       utils.ConstructZoneResourceUrl(c.Request, zone.GetId()),
+				ResourceURL:                       utils.GetZoneResourceUrl(c.Request, zone.GetId()),
 			})
 		}
-		// Sample output
-		// {
-		// 	"zoneList": {
-		// 	  "resourceURL": "string",
-		// 	  "zone": [
-		// 		{
-		// 		  "numberOfAccessPoints": 0,
-		// 		  "numberOfUnserviceableAccessPoints": 0,
-		// 		  "numberOfUsers": 0,
-		// 		  "resourceURL": "string",
-		// 		  "zoneId": "string"
-		// 		}
-		// 	  ]
-		// 	}
-		// }
 		response := responses.ZoneList{
 			ZoneList: responses.ZoneInfoList{
-				ResourceURL: utils.ConstructZoneListResourceUrl(c.Request),
+				ResourceURL: utils.GetZoneListResourceUrl(c.Request),
 				Zone:        zoneInfoList,
 			},
 		}
@@ -119,7 +100,7 @@ func GetZone() gin.HandlerFunc {
 			NumberOfAccessPoints:              int32(zone.CountAccessPoints()),
 			NumberOfUnserviceableAccessPoints: int32(zone.CountSericeableAccessPoints()),
 			NumberOfUsers:                     int32(zone.CountUsersInZone()),
-			ResourceURL:                       utils.ConstructZoneResourceUrl(c.Request, zone.GetId()),
+			ResourceURL:                       utils.GetZoneResourceUrl(c.Request, zone.GetId()),
 		}
 		// TODO: Process Zone Information here before returning
 		c.JSON(http.StatusOK, zr)
