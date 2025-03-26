@@ -45,7 +45,7 @@ func GetZone(zoneId string) (*Zone, error) {
 	zone.SetId(z.ZoneId)
 	// add access points to the zone
 	for _, apId := range z.AccessPoints {
-		log.Printf("adding access point %v to zone %v", apId, zoneId)
+		log.Printf("recovering data from access point %v to zone %v", apId, zoneId)
 		ap, err := GetAccessPoint(apId)
 		if err != nil {
 			log.Printf("error getting access point: %v", err)
