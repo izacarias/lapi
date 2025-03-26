@@ -36,6 +36,10 @@ func (z *Zone) AddAccessPoint(ap AccessPoint) {
 	z.accessPoints = append(z.accessPoints, ap)
 }
 
+func (z *Zone) GetAccessPoints() []AccessPoint {
+	return z.accessPoints
+}
+
 func (z *Zone) CountAccessPoints() int {
 	return len(z.accessPoints)
 }

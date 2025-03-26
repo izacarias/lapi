@@ -20,12 +20,22 @@ func GetConfigQueriesZones() string {
 	return fmt.Sprintf("%s/zones", GetConfigQueriesURI())
 }
 
-func ConstructZoneResourceUrl(r *http.Request, zoneId string) string {
+func GetZoneResourceUrl(r *http.Request, zoneId string) string {
 	zonesURI := GetConfigQueriesZones()
 	return fmt.Sprintf("%s/%s", zonesURI, zoneId)
 }
 
-func ConstructZoneListResourceUrl(r *http.Request) string {
+func GetZoneListResourceUrl(r *http.Request) string {
 	zonesURI := GetConfigQueriesZones()
 	return fmt.Sprintf("%s", zonesURI)
+}
+
+func GetAccessPointResourceUrl(r *http.Request, zoneId string, apId string) string {
+	zonesURI := GetConfigQueriesZones()
+	return fmt.Sprintf("%s/%s/accessPoints/%s", zonesURI, zoneId, apId)
+}
+
+func GetAccessPointListResourceUrl(r *http.Request, zoneId string) string {
+	zonesURI := GetConfigQueriesZones()
+	return fmt.Sprintf("%s/%s/accessPoints", zonesURI, zoneId)
 }

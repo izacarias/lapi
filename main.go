@@ -34,6 +34,7 @@ func main() {
 	routes.PingRoute(router)
 	// Adding Zone routes
 	routes.ZoneRoute(router)
+	routes.ApRoute(router)
 
 	// Adding Swagger routes
 	routes.SwaggerRoute(router)

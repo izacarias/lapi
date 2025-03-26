@@ -47,7 +47,7 @@ type AccessPointInfo struct {
 }
 
 // AccessPointList - A type containing list of access points.
-type AccessPointList struct {
+type AccessPointInfoList struct {
 	// Identifier of zone
 	ZoneId string `json:"zoneId"`
 
@@ -56,4 +56,8 @@ type AccessPointList struct {
 
 	// Self referring URL
 	ResourceURL string `json:"resourceURL"`
+}
+
+type AccessPointList struct {
+	AccessPoint AccessPointInfoList `json:"accessPointList"`
 }
