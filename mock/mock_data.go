@@ -31,20 +31,16 @@ func insertZoneData(client *mongo.Client) {
 	if count == 0 {
 		mockData := []interface{}{
 			domain.ZoneMongo{
-				ZoneId:       "zone1",
-				AccessPoints: []string{"ap1", "ap2"},
+				ZoneId: "zone1",
 			},
 			domain.ZoneMongo{
-				ZoneId:       "zone2",
-				AccessPoints: []string{"ap3", "ap4"},
+				ZoneId: "zone2",
 			},
 			domain.ZoneMongo{
-				ZoneId:       "zone3",
-				AccessPoints: []string{"ap1", "ap2"},
+				ZoneId: "zone3",
 			},
 			domain.ZoneMongo{
-				ZoneId:       "zone4",
-				AccessPoints: []string{"ap3", "ap4"},
+				ZoneId: "zone4",
 			},
 		}
 
@@ -75,29 +71,29 @@ func insertAccessPointData(client *mongo.Client) {
 				ApId:            "ap1",
 				ConnectionType:  string(domain.CT_WIFI),
 				OperationStatus: string(domain.OS_SERVICEABLE),
-				Users:           []string{"user1", "user2"},
 				Timezone:        "01-01-1970T00:00:00+01:00",
+				ZoneId:          "zone1",
 			},
 			domain.AccessPointMongo{
 				ApId:            "ap2",
 				ConnectionType:  string(domain.CT_WIFI),
 				OperationStatus: string(domain.OS_SERVICEABLE),
-				Users:           []string{"user3", "user4"},
 				Timezone:        "01-01-1970T00:00:00+01:00",
+				ZoneId:          "zone2",
 			},
 			domain.AccessPointMongo{
 				ApId:            "ap3",
 				ConnectionType:  string(domain.CT_5GNR),
 				OperationStatus: string(domain.OS_SERVICEABLE),
-				Users:           []string{"user5", "user6"},
 				Timezone:        "01-01-1970T00:00:00+01:00",
+				ZoneId:          "zone3",
 			},
 			domain.AccessPointMongo{
 				ApId:            "ap4",
 				ConnectionType:  string(domain.CT_5GNR),
 				OperationStatus: string(domain.OS_UNSERVICEABLE),
-				Users:           []string{"user7", "user8"},
 				Timezone:        "01-01-1970T00:00:00+01:00",
+				ZoneId:          "zone4",
 			},
 		}
 

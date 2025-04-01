@@ -13,8 +13,7 @@ import (
 var zoneCollection *mongo.Collection = configs.GetCollection(configs.DB, "zones")
 
 type ZoneMongo struct {
-	ZoneId       string   `json:"zone_id" bson:"zone_id"`
-	AccessPoints []string `json:"access_points" bson:"access_points"`
+	ZoneId string `json:"zone_id" bson:"zone_id"`
 }
 
 func GetZone(zoneId string) (*Zone, error) {
@@ -43,16 +42,14 @@ func GetZone(zoneId string) (*Zone, error) {
 
 	zone := NewZone()
 	zone.SetId(z.ZoneId)
-	// add access points to the zone
-	for _, apId := range z.AccessPoints {
-		log.Printf("recovering data from access point %v to zone %v", apId, zoneId)
-		ap, err := GetAccessPoint(apId)
-		if err != nil {
-			log.Printf("error getting access point: %v", err)
-		}
-		zone.AddAccessPoint(*ap)
+	aps, err := getAccessPointsByZoneId(zoneId)
+	if err != nil {
+		log.Printf("error getting access points: %v", err)
+		return NewZone(), err
 	}
-
+	for _, ap := range aps {
+		zone.AddAccessPoint(ap)
+	}
 	return zone, nil
 }
 
@@ -77,13 +74,12 @@ func GetAllZones() ([]Zone, error) {
 		zone := NewZone()
 		zone.SetId(z.ZoneId)
 		// add access points to the zone
-		for _, apId := range z.AccessPoints {
-			log.Printf("adding access point %v to zone %v", apId, z.ZoneId)
-			ap, err := GetAccessPoint(apId)
-			if err != nil {
-				log.Printf("error getting access point: %v", err)
-			}
-			zone.AddAccessPoint(*ap)
+		aps, err := getAccessPointsByZoneId(z.ZoneId)
+		if err != nil {
+			log.Printf("error getting access points: %v", err)
+		}
+		for _, ap := range aps {
+			zone.AddAccessPoint(ap)
 		}
 		zones = append(zones, *zone)
 	}
