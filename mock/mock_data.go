@@ -5,16 +5,46 @@ import (
 	"log"
 	"time"
 
+	"github.com/izacarias/lapi/configs"
 	"github.com/izacarias/lapi/domain"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
 func InsertMockData(client *mongo.Client) {
+
+	// Clear the database
+	if configs.GetConfigClearDatabase() {
+		clearDatabase(client)
+	}
+
+	if !configs.GetConfigInsertMockData() {
+		log.Println("Insert mock data is disabled, skipping")
+		return
+	}
 	// Insert mock data
 	insertZoneData(client)
 	insertAccessPointData(client)
+	insertLocationData(client)
+}
 
+func clearDatabase(client *mongo.Client) {
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	// get all collections in the database
+	collections, err := client.Database("lapi").ListCollectionNames(ctx, bson.M{})
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// Drop each collection
+	for _, collection := range collections {
+		if err := client.Database("lapi").Collection(collection).Drop(ctx); err != nil {
+			log.Fatal(err)
+		}
+	}
+	log.Println("Database cleared successfully")
 }
 
 func insertZoneData(client *mongo.Client) {
@@ -104,5 +134,43 @@ func insertAccessPointData(client *mongo.Client) {
 		log.Println("Inserted mock data into the access_points collection")
 	} else {
 		log.Println("Access Points collection is not empty, skipping mock data insertion")
+	}
+}
+
+func insertLocationData(client *mongo.Client) {
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	collection := client.Database("lapi").Collection("locations")
+	count, err := collection.CountDocuments(ctx, bson.M{})
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	if count == 0 {
+		mockData := []interface{}{
+			domain.LocationMongo{
+				ElementType: "ap",
+				ElementId:   "ap1",
+				Latitude:    1.0,
+				Longitude:   1.0,
+				Altitude:    1.0,
+			},
+			domain.LocationMongo{
+				ElementType: "ap",
+				ElementId:   "ap2",
+				Latitude:    2.0,
+				Longitude:   2.0,
+				Altitude:    2.0,
+			},
+		}
+
+		_, err := collection.InsertMany(ctx, mockData)
+		if err != nil {
+			log.Fatal(err)
+		}
+		log.Println("Inserted mock data into the locations collection")
+	} else {
+		log.Println("Locations collection is not empty, skipping mock data insertion")
 	}
 }
