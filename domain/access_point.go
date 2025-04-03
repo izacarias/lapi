@@ -31,7 +31,8 @@ type AccessPoint struct {
 	operation_status OperationStatus
 	time_zone        string
 	// list of users connected to the AP
-	users []User
+	users    []User
+	location Location
 }
 
 var (
@@ -44,6 +45,7 @@ func NewAccessPoint() *AccessPoint {
 		connection_type:  CT_UNKNOWN,
 		operation_status: OS_UNKNOWN,
 		time_zone:        "",
+		location:         *NewLocation(),
 	}
 }
 
@@ -90,4 +92,12 @@ func (ap *AccessPoint) AddUser(user *User) {
 
 func (ap *AccessPoint) CountUsers() int {
 	return len(ap.users)
+}
+
+func (ap *AccessPoint) SetLocation(location *Location) {
+	ap.location = *location
+}
+
+func (ap *AccessPoint) GetLocation() Location {
+	return ap.location
 }

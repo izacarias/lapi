@@ -27,7 +27,7 @@ type AccessPointInfo struct {
 	// Identifier of access point.
 	AccessPointId string `json:"accessPointId"`
 
-	// LocationInfo LocationInfo `json:"locationInfo,omitempty"`
+	LocationInfo LocationInfo `json:"locationInfo,omitempty"`
 
 	ConnectionType ConnectionType `json:"connectionType"`
 
