@@ -35,6 +35,7 @@ func main() {
 	// Adding Zone routes
 	routes.ZoneRoute(router)
 	routes.ApRoute(router)
+	routes.UserRoute(router)
 
 	// Adding Swagger routes
 	routes.SwaggerRoute(router)
