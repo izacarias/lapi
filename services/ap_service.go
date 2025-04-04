@@ -17,7 +17,13 @@ func ListApsInZone(zoneId string) ([]domain.AccessPoint, error) {
 	if err != nil {
 		return nil, err
 	}
-	return zone.GetAccessPoints(), nil
+	aps := zone.GetAccessPoints()
+	apsWithLocation := make([]domain.AccessPoint, len(aps))
+	for i, ap := range aps {
+		ap.SetLocation(getAPLocation(ap.GetId()))
+		apsWithLocation[i] = ap
+	}
+	return apsWithLocation, nil
 }
 
 func GetApInZone(zoneId, apId string) (*domain.AccessPoint, error) {

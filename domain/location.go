@@ -1,6 +1,9 @@
 package domain
 
-import "errors"
+import (
+	"errors"
+	"time"
+)
 
 const (
 	TYPE_AP   = "ap"
@@ -15,6 +18,8 @@ type Location struct {
 	Latitude  float32
 	Longitude float32
 	Altitude  float32
+	// TODO: add the timestamp field
+	Timestamp time.Time
 }
 
 func NewLocation() *Location {
@@ -22,6 +27,7 @@ func NewLocation() *Location {
 		Latitude:  0,
 		Longitude: 0,
 		Altitude:  0,
+		Timestamp: time.Now(),
 	}
 }
 

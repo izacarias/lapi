@@ -31,6 +31,7 @@ func ListAccessPoints() gin.HandlerFunc {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "error fetching zone"})
 			return
 		}
+		// TODO: add the location info to the response
 		apsResponse := make([]responses.AccessPointInfo, 0)
 		for _, ap := range aps {
 			apsResponse = append(apsResponse, responses.AccessPointInfo{
@@ -38,6 +39,12 @@ func ListAccessPoints() gin.HandlerFunc {
 				OperationStatus: responses.OperationStatus(ap.GetOperationStatus()),
 				NumberOfUsers:   int32(ap.CountUsers()),
 				ResourceURL:     utils.GetAccessPointResourceUrl(c.Request, zoneId, ap.GetId()),
+				LocationInfo: responses.LocationInfo{
+					Latitude:  []float32{ap.GetLocation().Latitude},
+					Longitude: []float32{ap.GetLocation().Longitude},
+					Altitude:  ap.GetLocation().Altitude,
+					Shape:     responses.LocationInfoShapeN2,
+				},
 			})
 		}
 
