@@ -26,6 +26,7 @@ func InsertMockData(client *mongo.Client) {
 	insertZoneData(client)
 	insertAccessPointData(client)
 	insertLocationData(client)
+	insertUserData(client)
 }
 
 func clearDatabase(client *mongo.Client) {
@@ -173,4 +174,60 @@ func insertLocationData(client *mongo.Client) {
 	} else {
 		log.Println("Locations collection is not empty, skipping mock data insertion")
 	}
+}
+
+func insertUserData(client *mongo.Client) {
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	collection := client.Database("lapi").Collection("users")
+	count, err := collection.CountDocuments(ctx, bson.M{})
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	if count == 0 {
+		mockData := []interface{}{
+			domain.UserMongo{
+				Address:     "192.168.1.1",
+				AccessPoint: "ap1",
+			},
+			domain.UserMongo{
+				Address:     "192.168.1.2",
+				AccessPoint: "ap2",
+			},
+			domain.UserMongo{
+				Address:     "192.168.1.3",
+				AccessPoint: "ap3",
+			},
+			domain.UserMongo{
+				Address:     "192.168.1.4",
+				AccessPoint: "ap4",
+			},
+			domain.UserMongo{
+				Address:     "192.168.1.5",
+				AccessPoint: "ap1",
+			},
+			domain.UserMongo{
+				Address:     "192.168.1.6",
+				AccessPoint: "ap2",
+			},
+			domain.UserMongo{
+				Address:     "192.168.1.7",
+				AccessPoint: "ap1",
+			},
+			domain.UserMongo{
+				Address:     "192.168.1.8",
+				AccessPoint: "ap1",
+			},
+		}
+		_, err := collection.InsertMany(ctx, mockData)
+		if err != nil {
+			log.Fatal(err)
+		}
+		log.Println("Inserted mock data into the users collection")
+	} else {
+		log.Println("Users collection is not empty, skipping mock data insertion")
+	}
+
 }

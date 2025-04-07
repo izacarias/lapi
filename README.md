@@ -29,7 +29,7 @@ or if is was already initialized
 **Run the server as a container**
 
     ```
-    podman run --name mongodb -p 27017:27017 -d docker.io/mongodb/mongodb-community-server:latest
+    podman run --name mongodb --privileged -p 27017:27017 -d docker.io/mongodb/mongodb-community-server:latest
     ```
 
 **If you want to persist data**

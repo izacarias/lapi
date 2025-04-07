@@ -20,7 +20,7 @@ type AccessPointMongo struct {
 	ZoneId          string `bson:"zone"`
 }
 
-func GetAccessPoint(apId string) (*AccessPoint, error) {
+func GetAccessPointById(apId string) (*AccessPoint, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
@@ -49,7 +49,7 @@ func GetAccessPoint(apId string) (*AccessPoint, error) {
 	accessPoint.SetConnectionType(ConnectionType(ap.ConnectionType))
 	accessPoint.SetOperationStatus(OperationStatus(ap.OperationStatus))
 	accessPoint.SetTimeZone(ap.Timezone)
-	// add users to the access point
+	// TODO: add users to the access point
 	return accessPoint, nil
 }
 
@@ -76,6 +76,7 @@ func getAccessPointsByZoneId(zoneId string) ([]AccessPoint, error) {
 		accessPoint.SetConnectionType(ConnectionType(ap.ConnectionType))
 		accessPoint.SetOperationStatus(OperationStatus(ap.OperationStatus))
 		accessPoint.SetTimeZone(ap.Timezone)
+		// TODO: add users to the access point
 		listOfAccessPoints = append(listOfAccessPoints, *accessPoint)
 	}
 	return listOfAccessPoints, nil
