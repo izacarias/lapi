@@ -18,6 +18,7 @@ type LocationMongo struct {
 	Latitude    float32 `bson:"latitude"`
 	Longitude   float32 `bson:"longitude"`
 	Altitude    float32 `bson:"altitude"`
+	Timestamp   int64   `bson:"timestamp"`
 }
 
 func GetLocation(elementType string, elementId string) (*Location, error) {
