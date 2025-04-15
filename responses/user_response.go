@@ -9,6 +9,13 @@ type TimeStamp struct {
 	NanoSeconds uint32 `json:"nanoSeconds"`
 }
 
+type UserInfoList struct {
+	// ResourceURL Self-referring URL, see note 1.
+	ResourceURL string `json:"resourceURL"`
+	// User List of users, see note 1.
+	User []UserInfo `json:"user"`
+}
+
 type UserInfo struct {
 	// Address Address of user (e.g. 'sip' URI, 'tel' URI, 'acr' URI) currently on the access point, see note 1.
 	Address string `json:"address"`

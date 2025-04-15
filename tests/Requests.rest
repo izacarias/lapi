@@ -35,5 +35,10 @@ GET http://127.0.0.1:8080/location/v3/queries/users?zoneId=zone01 HTTP/1.1
 
 ###
 
-# Should return Bad Request Error (ZoneId and AccessPointId cannot be used together)
-GET http://127.0.0.1:8080/location/v3/queries/users?zoneId=zone01&zoneId=zone02&accessPointId=ap1 HTTP/1.1
+# Should return a user list with onluy one user
+GET http://127.0.0.1:8080/location/v3/queries/users?address=192.168.1.1 HTTP/1.1
+
+###
+
+# Should return a user list with two users
+GET http://127.0.0.1:8080/location/v3/queries/users?address=192.168.1.1&address=192.168.1.2 HTTP/1.1

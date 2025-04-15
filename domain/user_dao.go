@@ -8,7 +8,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-var userCollection *mongo.Collection = configs.GetCollection(configs.DB, "locations")
+var userCollection *mongo.Collection = configs.GetCollection(configs.DB, "users")
 
 type UserMongo struct {
 	Address     string `bson:"address"`
