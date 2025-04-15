@@ -2,6 +2,7 @@
 ### https://marketplace.visualstudio.com/items?itemName=humao.rest-client
 ### humao.rest-client
 
+# Get a pong response from the server
 GET http://localhost:8080/ping HTTP/1.1
 Content-Type: application/json
 
@@ -32,41 +33,49 @@ Content-Type: application/json
 ###
 
 GET http://127.0.0.1:8080/location/v3/queries/users?zoneId=zone01 HTTP/1.1
+Content-Type: application/json
 
 ###
 
 # Should return am empty user list
 # Should return a user list with onluy one user
 GET http://127.0.0.1:8080/location/v3/queries/users?address=255.255.255.255 HTTP/1.1
+Content-Type: application/json
 
 ###
 
 # Should return a user list with onluy one user
 GET http://127.0.0.1:8080/location/v3/queries/users?address=192.168.1.1 HTTP/1.1
+Content-Type: application/json
 
 ###
 
 # Should return a user list with two users
 GET http://127.0.0.1:8080/location/v3/queries/users?address=192.168.1.1&address=192.168.1.2 HTTP/1.1
+Content-Type: application/json
 
 ###
 
 # Should return a user list with all users
 GET http://127.0.0.1:8080/location/v3/queries/users HTTP/1.1
+Content-Type: application/json
 
 ###
 
 # Should return a user list all users connected to AP1
 
 GET http://127.0.0.1:8080/location/v3/queries/users?accessPointId=ap1 HTTP/1.1
+Content-Type: application/json
 
 ###
 
 # Should return a user list all users connected to AP1 and AP2
 GET http://127.0.0.1:8080/location/v3/queries/users?accessPointId=ap1&accessPointId=ap2 HTTP/1.1
+Content-Type: application/json
 
 ###
 
 # Should return an empty user list
 # Should return a user list all users connected to AP1 and AP2
 GET http://127.0.0.1:8080/location/v3/queries/users?accessPointId=ap999 HTTP/1.1
+Content-Type: application/json
