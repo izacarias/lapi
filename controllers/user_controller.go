@@ -11,50 +11,6 @@ import (
 	"github.com/izacarias/lapi/utils"
 )
 
-/* Expected JSON response:
-{
-  "userList": {
-    "resourceURL": "https://try-mec.etsi.org/sbxoyur055/mep1/location/v3/queries/users",
-    "user": [
-      {
-        "address": "10.100.0.1",
-        "accessPointId": "4g-macro-cell-3",
-        "zoneId": "zone01",
-        "resourceURL": "https://try-mec.etsi.org/sbxoyur055/mep1/location/v3/queries/users?address=10.100.0.1",
-        "timestamp": {
-          "nanoSeconds": 0,
-          "seconds": 1743697065
-        },
-        "locationInfo": {
-          "latitude": [
-            43.735428
-          ],
-          "longitude": [
-            7.417364
-          ],
-          "shape": 2
-        },
-        "civicInfo": {
-          "country": "MC"
-        },
-        "relativeLocationInfo": {
-          "X": 447.71487,
-          "Y": -315.28012,
-          "mapInfo": {
-            "mapId": "324561243",
-            "origin": {
-              "latitude": 43.7314,
-              "longitude": 7.4202
-            }
-          }
-        }
-      }
-    ]
-  }
-}
-
-*/
-
 func ListUsers() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		qsZones := c.QueryArray("zoneId")
@@ -179,7 +135,12 @@ func formatUserResponse(c *gin.Context, userList []domain.User, queryAddress str
 			//TODO: Update with the timestamp from the last location update
 			Timestamp: responses.TimeStamp{Seconds: uint32(100), NanoSeconds: uint32(200)},
 			//TODO: Update with the location info
-			LocationInfo: &responses.LocationInfo{Latitude: []float32{43.123456}, Longitude: []float32{7.123456}, Altitude: 0.000, Shape: responses.LocationInfoShapeN2},
+			LocationInfo: &responses.LocationInfo{
+				Latitude:  []float32{user.Location.Latitude},
+				Longitude: []float32{user.Location.Longitude},
+				Altitude:  user.Location.Altitude,
+				Shape:     responses.LocationInfoShapeN2,
+			},
 		})
 	}
 
