@@ -8,6 +8,7 @@ import (
 	"github.com/izacarias/lapi/configs"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 var locationCollection *mongo.Collection = configs.GetCollection(configs.DB, "locations")
@@ -24,9 +25,10 @@ type LocationMongo struct {
 func GetLocation(elementType string, elementId string) (*Location, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
-
+	// Set up options to sort by timestamp in descending order (most recent first)
+	opts := options.Find().SetSort(bson.M{"timestamp": -1})
 	filter := bson.M{"element_type": elementType, "element_id": elementId}
-	cursor, err := locationCollection.Find(ctx, filter)
+	cursor, err := locationCollection.Find(ctx, filter, opts)
 	if err != nil {
 		log.Printf("error getting location: %v", err)
 		return NewLocation(), err
