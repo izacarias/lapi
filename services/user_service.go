@@ -2,6 +2,7 @@ package services
 
 import (
 	"log"
+	"math"
 
 	"github.com/izacarias/lapi/domain"
 )
@@ -70,4 +71,20 @@ func getUserLocation(userAddress string) *domain.Location {
 		log.Printf("error getting location for user %s: %v", userAddress, err)
 	}
 	return location
+}
+
+func CalculateDistance(userA, userB *domain.User) (*domain.TerminalDistance, error) {
+	locationA := userA.GetLocation()
+	locationB := userB.GetLocation()
+	distance := calculateEuclideanDistance(locationA, locationB)
+
+	return domain.NewTerminalDistance(0, distance, 0), nil
+}
+
+func calculateEuclideanDistance(locationA, locationB *domain.Location) int {
+	// Assuming locationA and locationB have Latitude and Longitude fields
+	latDiff := locationA.Latitude - locationB.Latitude
+	lonDiff := locationA.Longitude - locationB.Longitude
+	distance := int(math.Sqrt(float64(latDiff*latDiff + lonDiff*lonDiff)))
+	return distance
 }
