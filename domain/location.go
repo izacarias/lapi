@@ -42,3 +42,7 @@ func (l *Location) GetLongitude() float32 {
 func (l *Location) GetAltitude() float32 {
 	return l.Altitude
 }
+
+func (l *Location) GetTimestamp() time.Time {
+	return l.Timestamp
+}

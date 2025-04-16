@@ -1,13 +1,15 @@
 package domain
 
+import "time"
+
 type TerminalDistance struct {
 	accuracy  int
 	distance  int
-	timestamp int
+	timestamp time.Time
 }
 
 // NewTerminalDistance creates a new TerminalDistance instance
-func NewTerminalDistance(accuracy, distance, timestamp int) *TerminalDistance {
+func NewTerminalDistance(accuracy, distance int, timestamp time.Time) *TerminalDistance {
 	return &TerminalDistance{
 		accuracy:  accuracy,
 		distance:  distance,
@@ -26,6 +28,6 @@ func (td *TerminalDistance) GetDistance() int {
 }
 
 // GetTimestamp returns the timestamp
-func (td *TerminalDistance) GetTimestamp() int {
+func (td *TerminalDistance) GetTimestamp() time.Time {
 	return td.timestamp
 }

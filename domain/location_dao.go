@@ -48,6 +48,7 @@ func GetLocation(elementType string, elementId string) (*Location, error) {
 		Latitude:  location.Latitude,
 		Longitude: location.Longitude,
 		Altitude:  location.Altitude,
+		Timestamp: time.Unix(location.Timestamp, 0),
 	}, nil
 
 }

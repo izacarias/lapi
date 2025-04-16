@@ -13,7 +13,7 @@ func GetDistance() gin.HandlerFunc {
 	return func(c *gin.Context) {
 
 		qsUserAddress := c.QueryArray("address")
-		qsLatituted := c.Query("latitude")
+		qsLatitude := c.Query("latitude")
 		qsLongitude := c.Query("longitude")
 
 		// Possibilities
@@ -52,7 +52,7 @@ func GetDistance() gin.HandlerFunc {
 				Accuracy: calculatedDistance.GetAccuracy(),
 				Distance: calculatedDistance.GetDistance(),
 				Timestamp: &responses.TimeStamp{
-					Seconds:     uint32(calculatedDistance.GetTimestamp()),
+					Seconds:     uint32(calculatedDistance.GetTimestamp().Unix()),
 					NanoSeconds: 0,
 				},
 			}
@@ -61,7 +61,35 @@ func GetDistance() gin.HandlerFunc {
 		}
 
 		// 2. Get distance between a user and a coordinate (lat, lon)
-		if len(qsUserAddress) == 1 && qsLatituted != "" && qsLongitude != "" {
+		if len(qsUserAddress) == 1 && qsLatitude != "" && qsLongitude != "" {
+			userA, err := services.GetUserByAddress(qsUserAddress[0])
+			if err != nil {
+				c.JSON(http.StatusBadRequest, gin.H{
+					"message": fmt.Sprintf("User with address %s not found", qsUserAddress[0]),
+					"status":  http.StatusBadRequest,
+				})
+				return
+			}
+			calculatedDistance, err := services.CalculateDistanceLatLong(userA, qsLatitude, qsLongitude)
+
+			if err != nil {
+				c.JSON(http.StatusInternalServerError, gin.H{
+					"message": "Failed to calculate distance",
+					"status":  http.StatusInternalServerError,
+				})
+				return
+			}
+
+			response := responses.TerminalDistance{
+				Accuracy: calculatedDistance.GetAccuracy(),
+				Distance: calculatedDistance.GetDistance(),
+				Timestamp: &responses.TimeStamp{
+					Seconds:     uint32(calculatedDistance.GetTimestamp().Unix()),
+					NanoSeconds: 0,
+				},
+			}
+			c.JSON(http.StatusOK, response)
+			return
 
 		}
 

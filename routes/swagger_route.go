@@ -10,6 +10,5 @@ import (
 func SwaggerRoute(router *gin.Engine) {
 	// Routes related to Swagger
 	url := ginSwagger.URL("http://localhost:8080/swagger/doc.json")
-
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler, url))
 }

@@ -1,8 +1,11 @@
 package services
 
 import (
+	"fmt"
 	"log"
 	"math"
+	"strconv"
+	"time"
 
 	"github.com/izacarias/lapi/domain"
 )
@@ -77,14 +80,46 @@ func CalculateDistance(userA, userB *domain.User) (*domain.TerminalDistance, err
 	locationA := userA.GetLocation()
 	locationB := userB.GetLocation()
 	distance := calculateEuclideanDistance(locationA, locationB)
+	timeStamp := calculateTimestamp(locationA, locationB)
 
-	return domain.NewTerminalDistance(0, distance, 0), nil
+	return domain.NewTerminalDistance(0, distance, timeStamp), nil
+}
+
+func CalculateDistanceLatLong(user *domain.User, latitude, longitude string) (*domain.TerminalDistance, error) {
+	// Convert latitude and longitude to float32
+	lat, err := strconv.ParseFloat(latitude, 32)
+	if err != nil {
+		return nil, fmt.Errorf("invalid latitude: %v", err)
+	}
+	lon, err := strconv.ParseFloat(longitude, 32)
+	if err != nil {
+		return nil, fmt.Errorf("invalid longitude: %v", err)
+	}
+	locationA := user.GetLocation()
+	locationB := &domain.Location{
+		Latitude:  float32(lat),
+		Longitude: float32(lon),
+		// Since the altitude is not provided, we can set it to the user's altitude
+		Altitude: locationA.Altitude,
+	}
+	distance := calculateEuclideanDistance(locationA, locationB)
+	timeStamp := calculateTimestamp(locationA, locationB)
+	return domain.NewTerminalDistance(0, distance, timeStamp), nil
 }
 
 func calculateEuclideanDistance(locationA, locationB *domain.Location) int {
 	// Assuming locationA and locationB have Latitude and Longitude fields
 	latDiff := locationA.Latitude - locationB.Latitude
 	lonDiff := locationA.Longitude - locationB.Longitude
-	distance := int(math.Sqrt(float64(latDiff*latDiff + lonDiff*lonDiff)))
+	altDiff := locationA.Altitude - locationB.Altitude
+	// Calculate the Euclidean distance
+	distance := int(math.Sqrt(float64(latDiff*latDiff + lonDiff*lonDiff + altDiff*altDiff)))
 	return distance
+}
+
+func calculateTimestamp(locationA, locationB *domain.Location) time.Time {
+	if locationA.GetTimestamp().Before(locationB.GetTimestamp()) {
+		return locationA.GetTimestamp()
+	}
+	return locationB.GetTimestamp()
 }
