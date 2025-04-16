@@ -132,9 +132,10 @@ func formatUserResponse(c *gin.Context, userList []domain.User, queryAddress str
 			AccessPointId: &user.AccessPoint,
 			ZoneId:        user.ZoneId,
 			ResourceURL:   utils.GetUserResourceUrl(c.Request, user.Address),
-			//TODO: Update with the timestamp from the last location update
-			Timestamp: responses.TimeStamp{Seconds: uint32(100), NanoSeconds: uint32(200)},
-			//TODO: Update with the location info
+			Timestamp: responses.TimeStamp{
+				Seconds:     uint32(user.Location.Timestamp.Unix()),
+				NanoSeconds: 0,
+			},
 			LocationInfo: &responses.LocationInfo{
 				Latitude:  []float32{user.Location.Latitude},
 				Longitude: []float32{user.Location.Longitude},
