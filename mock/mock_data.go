@@ -139,6 +139,7 @@ func insertAccessPointData(client *mongo.Client) {
 // insertLocationData adds mock location data to the database
 func insertLocationData(client *mongo.Client) {
 	currentTime := time.Now().Unix()
+	oldTime := currentTime - 1000000
 	mockData := []interface{}{
 		domain.LocationMongo{
 			ElementType: domain.TYPE_AP,
@@ -195,6 +196,14 @@ func insertLocationData(client *mongo.Client) {
 			Longitude:   5.0,
 			Altitude:    6.0,
 			Timestamp:   currentTime,
+		},
+		domain.LocationMongo{
+			ElementType: domain.TYPE_USER,
+			ElementId:   "192.168.1.5",
+			Latitude:    10.0,
+			Longitude:   10.0,
+			Altitude:    10.0,
+			Timestamp:   oldTime,
 		},
 		domain.LocationMongo{
 			ElementType: domain.TYPE_USER,
