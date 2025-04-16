@@ -49,7 +49,7 @@ func GetAccessPointById(apId string) (*AccessPoint, error) {
 	accessPoint.SetConnectionType(ConnectionType(ap.ConnectionType))
 	accessPoint.SetOperationStatus(OperationStatus(ap.OperationStatus))
 	accessPoint.SetTimeZone(ap.Timezone)
-	// TODO: add users to the access point
+	accessPoint.SetZoneId(ap.ZoneId)
 	return accessPoint, nil
 }
 

@@ -33,6 +33,7 @@ type AccessPoint struct {
 	// list of users connected to the AP
 	users    []User
 	location Location
+	zone_id  string
 }
 
 var (
@@ -100,4 +101,12 @@ func (ap *AccessPoint) SetLocation(location *Location) {
 
 func (ap *AccessPoint) GetLocation() Location {
 	return ap.location
+}
+
+func (ap *AccessPoint) SetZoneId(zoneId string) {
+	ap.zone_id = zoneId
+}
+
+func (ap *AccessPoint) GetZoneId() string {
+	return ap.zone_id
 }

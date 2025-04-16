@@ -8,43 +8,48 @@ Content-Type: application/json
 
 ###
 
+# List all zones in the Database
 GET http://127.0.0.1:8080/location/v3/queries/zones HTTP/1.1
 Content-Type: application/json
 
 ###
 
+# Get a zone by its ID
 GET http://127.0.0.1:8080/location/v3/queries/zones/zone1 HTTP/1.1
 Content-Type: application/json
 
 ### 
 
+# List all access points in Zone1
 GET http://127.0.0.1:8080/location/v3/queries/zones/zone1/accessPoints HTTP/1.1
 Content-Type: application/json
 
 ###
 
+# Get a specific access point in Zone1 (Ap1)
 GET http://127.0.0.1:8080/location/v3/queries/zones/zone1/accessPoints/ap1 HTTP/1.1
 Content-Type: application/json
 
 ###
+# Should return a 404 error
+GET http://127.0.0.1:8080/location/v3/queries/zones/zone1/accessPoints/ap2 HTTP/1.1
+Content-Type: application/json
+
+###
+
+# Get a specific access point in Zone2 (Ap2)
 GET http://127.0.0.1:8080/location/v3/queries/zones/zone2/accessPoints/ap2 HTTP/1.1
 Content-Type: application/json
 
 ###
 
-GET http://127.0.0.1:8080/location/v3/queries/users?zoneId=zone01 HTTP/1.1
+# List all users in Zone1 (mock data has 4 users)
+GET http://127.0.0.1:8080/location/v3/queries/users?zoneId=zone1 HTTP/1.1
 Content-Type: application/json
 
 ###
 
-# Should return am empty user list
-# Should return a user list with onluy one user
-GET http://127.0.0.1:8080/location/v3/queries/users?address=255.255.255.255 HTTP/1.1
-Content-Type: application/json
-
-###
-
-# Should return a user list with onluy one user
+# Should return one user
 GET http://127.0.0.1:8080/location/v3/queries/users?address=192.168.1.1 HTTP/1.1
 Content-Type: application/json
 
@@ -76,6 +81,5 @@ Content-Type: application/json
 ###
 
 # Should return an empty user list
-# Should return a user list all users connected to AP1 and AP2
 GET http://127.0.0.1:8080/location/v3/queries/users?accessPointId=ap999 HTTP/1.1
 Content-Type: application/json

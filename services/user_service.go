@@ -12,7 +12,9 @@ func GetAllUsers() ([]domain.User, error) {
 		log.Printf("error getting all users: %v", err)
 		return nil, err
 	}
-	return enrichUsersWithLocation(users), nil
+	users = enrichUsersWithLocation(users)
+	users = enrichUsersWithZone(users)
+	return users, nil
 }
 
 func GetUserByAddress(address string) (*domain.User, error) {
@@ -22,7 +24,21 @@ func GetUserByAddress(address string) (*domain.User, error) {
 		return nil, err
 	}
 	user = enrichUserWithLocation(user)
+	user.SetZoneId(getZoneInformation(user))
 	return user, nil
+}
+
+func getZoneInformation(user *domain.User) string {
+	// Get the access point ID from the user
+	accessPointId := user.GetAccessPoint()
+	// Get the access point by its ID
+	accessPoint, err := domain.GetAccessPointById(accessPointId)
+	if err != nil {
+		log.Printf("error getting access point by ID %s: %v", accessPointId, err)
+		return ""
+	}
+	// Set the zone ID in the user
+	return accessPoint.GetZoneId()
 }
 
 func enrichUserWithLocation(user *domain.User) *domain.User {
@@ -38,7 +54,15 @@ func enrichUsersWithLocation(users []domain.User) []domain.User {
 	return users
 }
 
-// getAPLocation retrieves the location for an access point
+func enrichUsersWithZone(users []domain.User) []domain.User {
+	for i, user := range users {
+		user.SetZoneId(getZoneInformation(&user))
+		users[i] = user
+	}
+	return users
+}
+
+// getUserLocation retrieves the location for a user
 func getUserLocation(userAddress string) *domain.Location {
 	log.Printf("getting location for User %s", userAddress)
 	location, err := domain.GetLocation(domain.TYPE_USER, userAddress)
