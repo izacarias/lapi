@@ -29,6 +29,27 @@ func GetUserByAddress(address string) (*User, error) {
 	}, nil
 }
 
+func GetUsersByAccessPoint(accessPoint string) ([]User, error) {
+	filter := bson.M{"access_point": accessPoint}
+	var users []UserMongo
+	cursor, err := userCollection.Find(context.TODO(), filter)
+	if err != nil {
+		return nil, err
+	}
+	if err := cursor.All(context.TODO(), &users); err != nil {
+		return nil, err
+	}
+	userList := make([]User, len(users))
+	for i, user := range users {
+		userList[i] = User{
+			Address:     user.Address,
+			AccessPoint: user.AccessPoint,
+			ZoneId:      "not defined",
+		}
+	}
+	return userList, nil
+}
+
 func GetAllUsers() ([]User, error) {
 	cursor, err := userCollection.Find(context.TODO(), bson.M{})
 	if err != nil {

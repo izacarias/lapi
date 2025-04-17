@@ -91,12 +91,6 @@ func GetAccessPoint() gin.HandlerFunc {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "error fetching access point"})
 			return
 		}
-		// apLocation, err := services.GetAPLocation(apId)
-		if err != nil {
-			log.Printf("error getting access point location %s in zone %s: %v", apId, zoneId, err)
-			c.JSON(http.StatusInternalServerError, gin.H{"error": "error fetching access point location"})
-			return
-		}
 
 		response := responses.AnAccessPointInfo{
 			AccessPoint: responses.AccessPointInfo{

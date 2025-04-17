@@ -19,7 +19,14 @@ func ListApsInZone(zoneId string) ([]domain.AccessPoint, error) {
 		return nil, err
 	}
 
-	return enrichAccessPointsWithLocation(zone.GetAccessPoints()), nil
+	aps := zone.GetAccessPoints()
+	aps = enrichAccessPointsWithLocation(aps)
+	for i, ap := range aps {
+		// Enrich the access point with users
+		ap = enrichAccessPointWithUsers(aps[i])
+		aps[i] = ap
+	}
+	return aps, nil
 }
 
 func GetApInZone(zoneId, apId string) (*domain.AccessPoint, error) {
@@ -33,6 +40,7 @@ func GetApInZone(zoneId, apId string) (*domain.AccessPoint, error) {
 	for _, ap := range zone.GetAccessPoints() {
 		if ap.GetId() == apId {
 			enrichedAp := enrichAccessPointWithLocation(ap)
+			enrichedAp = enrichAccessPointWithUsers(enrichedAp)
 			return &enrichedAp, nil
 		}
 	}
@@ -73,4 +81,19 @@ func getAPLocation(apId string) *domain.Location {
 		log.Printf("error getting location for AP %s: %v", apId, err)
 	}
 	return location
+}
+
+func enrichAccessPointWithUsers(ap domain.AccessPoint) domain.AccessPoint {
+	// Enrich the access point with users
+	users, err := domain.GetUsersByAccessPoint(ap.GetId())
+	if err != nil {
+		log.Printf("error getting users for AP %s: %v", ap.GetId(), err)
+		return ap
+	}
+
+	for _, user := range users {
+		ap.AddUser(&user)
+	}
+	// Set the number of users
+	return ap
 }
