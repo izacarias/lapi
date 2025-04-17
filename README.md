@@ -50,6 +50,18 @@ or if is was already initialized
 > This is due to a requirement of MongoDB and the rights to access files in folders. Without the 
 > `sudo` command, SElinux prevents the MondoDB container to write in the filesystem causing an error.
 
+# Testing
+
+The integration tests assume the MongoDB instance is running an is accessible. Please keep in mind that the
+database will be recreated and filled with mock data (make sure that the options `PURGEDATABASE` and 
+`INSERTMOCKDATA` are enabled in the (.env)[.env] file).
+
+Change to the project directory and run the tests as following:
+```
+cd <PROJECT_DIRECTORY>
+go test -v
+```
+
 # Development Instructions
 
 ## Update Swagger Specifications
