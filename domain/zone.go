@@ -53,11 +53,3 @@ func (z *Zone) CountSericeableAccessPoints() int {
 	}
 	return count
 }
-
-func (z *Zone) CountUsersInZone() int {
-	count := 0
-	for _, ap := range z.accessPoints {
-		count += ap.CountUsers()
-	}
-	return count
-}

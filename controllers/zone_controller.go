@@ -45,7 +45,7 @@ func ListZones() gin.HandlerFunc {
 				ZoneId:                            zone.GetId(),
 				NumberOfAccessPoints:              int32(zone.CountAccessPoints()),
 				NumberOfUnserviceableAccessPoints: int32(zone.CountSericeableAccessPoints()),
-				NumberOfUsers:                     int32(zone.CountUsersInZone()),
+				NumberOfUsers:                     int32(services.CountUsersInZone(&zone)),
 				ResourceURL:                       utils.GetZoneResourceUrl(c.Request, zone.GetId()),
 			})
 		}
@@ -99,7 +99,7 @@ func GetZone() gin.HandlerFunc {
 			ZoneId:                            zone.GetId(),
 			NumberOfAccessPoints:              int32(zone.CountAccessPoints()),
 			NumberOfUnserviceableAccessPoints: int32(zone.CountSericeableAccessPoints()),
-			NumberOfUsers:                     int32(zone.CountUsersInZone()),
+			NumberOfUsers:                     int32(services.CountUsersInZone(zone)),
 			ResourceURL:                       utils.GetZoneResourceUrl(c.Request, zone.GetId()),
 		}
 		// TODO: Process Zone Information here before returning
