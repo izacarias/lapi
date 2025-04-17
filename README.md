@@ -54,7 +54,7 @@ or if is was already initialized
 
 The integration tests assume the MongoDB instance is running an is accessible. Please keep in mind that the
 database will be recreated and filled with mock data (make sure that the options `PURGEDATABASE` and 
-`INSERTMOCKDATA` are enabled in the (.env)[.env] file).
+`INSERTMOCKDATA` are enabled in the [.env](.env) file).
 
 Change to the project directory and run the tests as following:
 ```
