@@ -54,3 +54,24 @@ func GetLocation(elementType string, elementId string) (*Location, error) {
 	}, nil
 
 }
+
+func SaveLocation(elementType string, elementId string, location *Location) error {
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	locationMongo := LocationMongo{
+		ElementType: elementType,
+		ElementId:   elementId,
+		Latitude:    location.Latitude,
+		Longitude:   location.Longitude,
+		Altitude:    location.Altitude,
+		Timestamp:   location.Timestamp.Unix(),
+	}
+
+	_, err := locationCollection.InsertOne(ctx, locationMongo)
+	if err != nil {
+		log.Printf("error inserting new location record %v. The error was %v", locationMongo, err)
+		return err
+	}
+	return nil
+}

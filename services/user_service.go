@@ -32,6 +32,34 @@ func GetUserByAddress(address string) (*domain.User, error) {
 	return user, nil
 }
 
+func UpdateUserLocation(userAddress string, accessPointName string, location *domain.Location) error {
+	err := domain.SaveLocation(domain.TYPE_USER, userAddress, location)
+	if err != nil {
+		log.Printf("error saving location for user %s: %v", userAddress, err)
+		return err
+	}
+	user, err := domain.GetUserByAddress(userAddress)
+	if err != nil {
+		log.Printf("error getting user by address %s: %v", userAddress, err)
+		return err
+	}
+	return UpdateAccessPoint(user, accessPointName)
+
+}
+
+func UpdateAccessPoint(user *domain.User, accessPointName string) error {
+	user_ap := user.GetAccessPoint()
+	if user_ap != accessPointName {
+		log.Printf("moving user %s to access point %s", user.GetAddress(), accessPointName)
+		err := domain.UpdateUser(user)
+		if err != nil {
+			log.Printf("error updating user %s: %v", user.GetAddress(), err)
+			return err
+		}
+	}
+	return nil
+}
+
 func getZoneInformation(user *domain.User) string {
 	// Get the access point ID from the user
 	accessPointId := user.GetAccessPoint()

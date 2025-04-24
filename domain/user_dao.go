@@ -69,3 +69,10 @@ func GetAllUsers() ([]User, error) {
 	}
 	return usersList, nil
 }
+
+func UpdateUser(user *User) error {
+	filter := bson.M{"address": user.Address}
+	update := bson.M{"$set": bson.M{"access_point": user.AccessPoint}}
+	_, err := userCollection.UpdateOne(context.TODO(), filter, update)
+	return err
+}

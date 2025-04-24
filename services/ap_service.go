@@ -48,6 +48,27 @@ func GetApInZone(zoneId, apId string) (*domain.AccessPoint, error) {
 	return nil, domain.ErrAccessPointNotFound
 }
 
+func UpdateAPLocation(apId string, newLocation *domain.Location) error {
+	oldLocation := getAPLocation(apId)
+	if !sameLocation(oldLocation, newLocation) {
+		err := domain.SaveLocation(domain.TYPE_AP, apId, newLocation)
+		if err != nil {
+			log.Printf("error saving location for AP %s: %v", apId, err)
+			return err
+		}
+	}
+	return nil
+}
+
+func sameLocation(oldLocation, newLocation *domain.Location) bool {
+	if oldLocation == nil || newLocation == nil {
+		return false
+	}
+	return oldLocation.GetLatitude() == newLocation.GetLatitude() &&
+		oldLocation.GetLongitude() == newLocation.GetLongitude() &&
+		oldLocation.GetAltitude() == newLocation.GetAltitude()
+}
+
 // getZoneById retrieves a zone by its ID
 func getZoneById(zoneId string) (*domain.Zone, error) {
 	zone, err := domain.GetZone(zoneId)

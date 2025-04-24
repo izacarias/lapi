@@ -25,22 +25,25 @@ func main() {
 	// Connect to MongoDB
 	client := configs.ConnectDB()
 
+	// set the gin mode to release
+	// gin.SetMode(gin.ReleaseMode)
+
 	// Inserting mock data
 	mock.InsertMockData(client)
 
 	router := gin.Default()
 
-	// Adding Ping routes
+	// Setting up routes
 	routes.PingRoute(router)
-	// Adding Zone routes
 	routes.ZoneRoute(router)
 	routes.ApRoute(router)
 	routes.UserRoute(router)
 	routes.DistanceRoute(router)
+	routes.MininetRoute(router)
 
 	// Adding Swagger routes
 	routes.SwaggerRoute(router)
 
 	// Running the server
-	router.Run(":8080")
+	router.Run("192.168.124.1:8080")
 }

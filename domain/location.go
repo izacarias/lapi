@@ -46,3 +46,19 @@ func (l *Location) GetAltitude() float32 {
 func (l *Location) GetTimestamp() time.Time {
 	return l.Timestamp
 }
+
+func (l *Location) SetLatitude(latitude float32) {
+	l.Latitude = latitude
+}
+
+func (l *Location) SetLongitude(longitude float32) {
+	l.Longitude = longitude
+}
+
+func (l *Location) SetAltitude(altitude float32) {
+	l.Altitude = altitude
+}
+
+func (l *Location) SetTimestamp(timestamp time.Time) {
+	l.Timestamp = timestamp
+}
