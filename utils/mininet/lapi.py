@@ -4,16 +4,143 @@ from mininet.log import info
 from os import environ
 import threading
 import time
+import json
+import datetime
 
 try:
   from urllib.request import build_opener, HTTPHandler, Request
 except ImportError:
   from urllib2 import build_opener, HTTPHandler, Request
 
+LAPI_URL = environ.get('LAPI_URL', 'http://192.168.124.1:8080/mininet')
+
+class LapiUser:
+    """
+    Represents a user with location information for LAPI integration
+    """
+    def __init__(self, userid, coordx, coordy, coordz, apname=None):
+        """
+        Initialize a LapiUser object
+        
+        Args:
+            userid (str): User identifier
+            coordx (float): X coordinate position
+            coordy (float): Y coordinate position
+            coordz (float): Z coordinate position
+            apname (str, optional): Name of the AP the user is connected to
+            timestamp (str, optional): Timestamp of the location data
+        """
+        self.userid = userid
+        self.coordx = float(coordx)
+        self.coordy = float(coordy)
+        self.coordz = float(coordz)
+        self.apname = apname
+        self.timestamp = int(time.time())
+    
+    def to_dict(self):
+        """
+        Convert the LapiUser object to a dictionary
+        
+        Returns:
+            dict: Dictionary representation of the LapiUser
+        """
+        return {
+            "userid": self.userid,
+            "coordx": self.coordx,
+            "coordy": self.coordy,
+            "coordz": self.coordz,
+            "apname": self.apname,
+            "timestamp": self.timestamp
+        }
+    
+    def to_json(self):
+        """
+        Convert the LapiUser object to a JSON string
+        
+        Returns:
+            str: JSON string representation of the LapiUser
+        """
+        return json.dumps(self.to_dict())
+
+class LapiAP:
+    """
+    Represents an Access Point (AP) with location information for LAPI integration
+    """
+    def __init__(self, apid, coordx, coordy, coordz):
+        """
+        Initialize a LapiAP object
+        
+        Args:
+            apid (str): Identifier of the AP
+            coordx (float): X coordinate position
+            coordy (float): Y coordinate position
+            coordz (float): Z coordinate position
+            timestamp (str, optional): Timestamp of the location data
+        """
+        self.apid = apid
+        self.coordx = float(coordx)
+        self.coordy = float(coordy)
+        self.coordz = float(coordz)
+        self.timestamp = int(time.time())
+    
+    def to_dict(self):
+        """
+        Convert the LapiAP object to a dictionary
+        
+        Returns:
+            dict: Dictionary representation of the LapiAP
+        """
+        return {
+            "apid": self.apid,
+            "coordx": self.coordx,
+            "coordy": self.coordy,
+            "coordz": self.coordz,
+            "timestamp": self.timestamp
+        }
+    
+    def to_json(self):
+        """
+        Convert the LapiAP object to a JSON string
+        
+        Returns:
+            str: JSON string representation of the LapiAP
+        """
+        return json.dumps(self.to_dict())
+
 def wifi_wrapper(fn):
+
+    def lapi_post(url, data):
+        """
+        Send a POST request to the LAPI server
+        
+        Args:
+            url (str): URL of the LAPI server
+            data (dict): Data to be sent in the request
+        """
+        try:
+            opener = build_opener(HTTPHandler)
+            request = Request(url, data=data.encode('utf-8'), headers={'Content-Type': 'application/json'})
+            info(f"Sending LAPI request to {url} with data: {data}\n")
+            response = opener.open(request)
+            return response.read()
+        except Exception as e:
+            print(f"Error sending LAPI request: {e}\n")
+            return None
+    
+    def send_users(net):
+        """Sends user information to the LAPI server"""
+        try:
+            # Get the list of stations and APs
+            nodes = net.get_mn_wifi_nodes()
+            for n in nodes:
+                if isinstance(n, (Station, Car)):
+                    (x, y, z) = n.getxyz()
+                    info(f"Station {n.name} location: {x}, {y}, {z}\n")
+        except Exception as e:
+            print(f"Error in sending users: {e}\n")
     
     def monitor_locations(net, interval=5):
-        """Periodically prints location information of stations and APs"""
+        """Periodically sends location information of stations and APs"""
         
         def location_monitor():
             while True:
@@ -24,10 +151,24 @@ def wifi_wrapper(fn):
                     for n in nodes:
                         if isinstance(n, (Station, Car)):
                             (x, y, z) = n.getxyz()
-                            info(f"Station {n.name} location: {x}, {y}, {z}\n")
+                            if n.params['wlan'][0]: 
+                                wintf  = n.getNameToWintf(n.params['wlan'][0])
+                                wintf_name = wintf.associatedTo if wintf.associatedTo else None
+                                ap_name = str(wintf_name).split('-')[0] if wintf_name else None
+                            else:
+                                ap_name = None
+                            # info(f"Station {n.name} (AP: {ap_name}) location: {x}, {y}, {z}\n")
+                            # Send user data to LAPI
+                            node_ip = n.params['ip'].split('/')[0]
+                            # user = LapiUser(n.name, x, y, z, ap_name)
+                            user = LapiUser(node_ip, x, y, z, ap_name)
+                            data = user.to_json()
+                            lapi_post(LAPI_URL + "/location", data)
                         if isinstance(n, (AP)):
                             (x, y, z) = n.getxyz()
-                            info(f"AP {n.name} location: {x}, {y}, {z}\n")
+                            ap = LapiAP(n.name, x, y, z)
+                            data = ap.to_json()
+                            lapi_post(LAPI_URL + "/aplocation", data)
                     time.sleep(interval)
                 except Exception as e:
                     print(f"Error in location monitoring: {e}\n")
@@ -42,6 +183,8 @@ def wifi_wrapper(fn):
         res = fn(*args, **kwargs)
         net = args[0]
         
+        # Add users from Mininet_wifi
+        send_users(net)
         # Start location monitoring with default 5-second interval
         # (can be adjusted by setting LOCATION_INTERVAL env var)
         interval = int(environ.get('LOCATION_INTERVAL', '5'))
