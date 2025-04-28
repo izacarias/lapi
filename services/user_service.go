@@ -51,6 +51,7 @@ func UpdateAccessPoint(user *domain.User, accessPointName string) error {
 	user_ap := user.GetAccessPoint()
 	if user_ap != accessPointName {
 		log.Printf("moving user %s to access point %s", user.GetAddress(), accessPointName)
+		user.SetAccessPoint(accessPointName)
 		err := domain.UpdateUser(user)
 		if err != nil {
 			log.Printf("error updating user %s: %v", user.GetAddress(), err)
