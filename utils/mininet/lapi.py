@@ -187,7 +187,7 @@ def wifi_wrapper(fn):
         send_users(net)
         # Start location monitoring with default 5-second interval
         # (can be adjusted by setting LOCATION_INTERVAL env var)
-        interval = int(environ.get('LOCATION_INTERVAL', '5'))
+        interval = int(environ.get('LOCATION_INTERVAL', '1'))
         monitor_locations(net, interval)
         
         return res
