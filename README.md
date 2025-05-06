@@ -147,6 +147,12 @@ This project is licensed under the Apache 2.0 License - see the [LICENSE](LICENS
 
 ## Contact
 
-Iulisloi Zacarias - [@izacarias](https://github.com/izacarias)
+Iulisloi Zacarias 
+- [Personal page at TU Braunschweig](https://www.tu-braunschweig.de/en/kns/faculty-and-staff/iulisloi-zacarias)
+- [@izacarias at GitHub](https://github.com/izacarias)
 
 Project Link: [https://github.com/izacarias/lapi](https://github.com/izacarias/lapi)
+
+## Acknowledgment
+
+This work was supported by the German Federal Ministry of Education and Research (BMBF) project [6G-ANNA](https://6g-anna.de/), grant agreement number 16KISK100.
