@@ -5,6 +5,9 @@ This API provides location services for Mobile Edge Computing applications.
 
 ![GitHub last commit](https://img.shields.io/github/last-commit/izacarias/lapi)
 ![GitHub top language](https://img.shields.io/github/languages/top/izacarias/lapi)
+![MongoDB](https://img.shields.io/badge/-MongoDB-4DB33D?style=flat&logo=mongodb&logoColor=white)
+![Go](https://img.shields.io/badge/-Go-00ADD8?style=flat&logo=go&logoColor=white)
+![Docker Compose](https://img.shields.io/badge/Docker%20Compose-2496ED?style=flat&logo=docker&logoColor=white)
 
 ## Features
 
