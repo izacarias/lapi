@@ -9,6 +9,20 @@ import (
 	"github.com/izacarias/lapi/services"
 )
 
+// GetDistance godoc
+// @Summary Query information about distance from a user to a location or between two users
+// @Description The GET method is used to query information about distance from a user to a location or between two users.
+// @Id distanceGET
+// @Tags location
+// @Produce json
+// @Param address query []string true "User address" // 2 addresses for distance between users
+// @Param latitude query string false "Latitude" // 1 address and lat/lon for distance to a location
+// @Param longitude query string false "Longitude" // 1 address and lat/lon for distance to a location
+// @Success 200 {object} responses.TerminalDistance
+// @Failure 400 {object} responses.ProblemDetails "Bad Request"
+// @Failure 404 {object} responses.ProblemDetails "User Not Found"
+// @Failure 500 {object} responses.ProblemDetails "Internal Server Error"
+// @Router /queries/distance [get]
 func GetDistance() gin.HandlerFunc {
 	return func(c *gin.Context) {
 

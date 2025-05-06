@@ -11,14 +11,243 @@
             "url": "https://github.com/izacarias"
         },
         "license": {
-            "name": "BSD-3-Clause",
-            "url": "https://forge.etsi.org/legal-matters"
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
         },
         "version": "3.1.1"
     },
     "host": "localhost:8080",
     "basePath": "/location/v3/",
     "paths": {
+        "/mininet/aplocation": {
+            "post": {
+                "description": "The POST method is used to update the location of an access point",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "mininet"
+                ],
+                "summary": "Update the location of an access point with data from Mininet",
+                "operationId": "updateMnAPLocationPOST",
+                "parameters": [
+                    {
+                        "description": "Access Point Location Update",
+                        "name": "location",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/controllers.mininetApLocationUpdate"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Location updated successfully",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/responses.ProblemDetails"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/responses.ProblemDetails"
+                        }
+                    }
+                }
+            }
+        },
+        "/mininet/location": {
+            "post": {
+                "description": "The POST method is used to update the location of a user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "mininet"
+                ],
+                "summary": "Update the location of a user with data from Mininet",
+                "operationId": "updateMnUserLocationPOST",
+                "parameters": [
+                    {
+                        "description": "User Location Update",
+                        "name": "location",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/controllers.mininetUserLocationUpdate"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Location updated successfully",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/responses.ProblemDetails"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/responses.ProblemDetails"
+                        }
+                    }
+                }
+            }
+        },
+        "/queries/distance": {
+            "get": {
+                "description": "The GET method is used to query information about distance from a user to a location or between two users.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "location"
+                ],
+                "summary": "Query information about distance from a user to a location or between two users",
+                "operationId": "distanceGET",
+                "parameters": [
+                    {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "csv",
+                        "description": "User address",
+                        "name": "address",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Latitude",
+                        "name": "latitude",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Longitude",
+                        "name": "longitude",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responses.TerminalDistance"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/responses.ProblemDetails"
+                        }
+                    },
+                    "404": {
+                        "description": "User Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/responses.ProblemDetails"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/responses.ProblemDetails"
+                        }
+                    }
+                }
+            }
+        },
+        "/queries/users": {
+            "get": {
+                "description": "The GET method is used to query location information about a specific UE or a group of Ues.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "location"
+                ],
+                "summary": "Query location information about a specific UE or a group of UEs",
+                "operationId": "usersGET",
+                "parameters": [
+                    {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "multi",
+                        "description": "Zone ID",
+                        "name": "zoneId",
+                        "in": "query"
+                    },
+                    {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "multi",
+                        "description": "Access Point ID",
+                        "name": "accessPointId",
+                        "in": "query"
+                    },
+                    {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "multi",
+                        "description": "User address",
+                        "name": "address",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responses.UserInfoList"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/responses.ProblemDetails"
+                        }
+                    },
+                    "404": {
+                        "description": "User Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/responses.ProblemDetails"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/responses.ProblemDetails"
+                        }
+                    }
+                }
+            }
+        },
         "/queries/zones": {
             "get": {
                 "description": "The GET method is used to query the information about one or more specific zones or a list of zones.",
@@ -28,7 +257,7 @@
                 "tags": [
                     "location"
                 ],
-                "summary": "Query the information about one or more specific zones or a list of zones.",
+                "summary": "Retrieves information about one or more specific zones or a list of zones.",
                 "operationId": "zonesGET",
                 "parameters": [
                     {
@@ -55,9 +284,141 @@
                 }
             }
         },
+        "/queries/zones/{id}/accessPoints": {
+            "get": {
+                "description": "The GET method is used to query the information about a specific access point or a list of access points under a zone.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "location"
+                ],
+                "summary": "Query information about a specific access point or a list of access points under a zone",
+                "operationId": "accessPointsGET",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Zone ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responses.AccessPointList"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/responses.ProblemDetails"
+                        }
+                    },
+                    "404": {
+                        "description": "Zone Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/responses.ProblemDetails"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/responses.ProblemDetails"
+                        }
+                    }
+                }
+            }
+        },
+        "/queries/zones/{id}/accessPoints/{apId}": {
+            "get": {
+                "description": "The GET method is used to query the information about a specific access point under a zone.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "location"
+                ],
+                "summary": "Query information about a specific access point under a zone.",
+                "operationId": "accessPointGetById",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Zone ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Access Point ID",
+                        "name": "apId",
+                        "in": "path"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responses.AnAccessPointInfo"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/responses.ProblemDetails"
+                        }
+                    },
+                    "404": {
+                        "description": "Access Point Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/responses.ProblemDetails"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/responses.ProblemDetails"
+                        }
+                    }
+                }
+            }
+        },
         "/queries/zones/{zoneId}": {
             "get": {
+                "description": "The GET method is used to query the information about a specific zone.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "location"
+                ],
+                "summary": "Query information about a specific zone",
+                "operationId": "zoneGetById",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Zone ID",
+                        "name": "zoneId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
                 "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responses.ZoneInfo"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    },
                     "500": {
                         "description": "Internal Server Error"
                     }
@@ -66,6 +427,300 @@
         }
     },
     "definitions": {
+        "controllers.mininetApLocationUpdate": {
+            "type": "object",
+            "properties": {
+                "apid": {
+                    "type": "string"
+                },
+                "coordx": {
+                    "type": "number"
+                },
+                "coordy": {
+                    "type": "number"
+                },
+                "coordz": {
+                    "type": "number"
+                },
+                "timestamp": {
+                    "type": "integer"
+                }
+            }
+        },
+        "controllers.mininetUserLocationUpdate": {
+            "type": "object",
+            "properties": {
+                "apname": {
+                    "type": "string"
+                },
+                "coordx": {
+                    "type": "number"
+                },
+                "coordy": {
+                    "type": "number"
+                },
+                "coordz": {
+                    "type": "number"
+                },
+                "timestamp": {
+                    "type": "integer"
+                },
+                "userid": {
+                    "type": "string"
+                }
+            }
+        },
+        "responses.AccessPointInfo": {
+            "type": "object",
+            "properties": {
+                "accessPointId": {
+                    "description": "Identifier of access point.",
+                    "type": "string"
+                },
+                "connectionType": {
+                    "$ref": "#/definitions/responses.ConnectionType"
+                },
+                "interestRealm": {
+                    "description": "Interest realm of access point.",
+                    "type": "string"
+                },
+                "locationInfo": {
+                    "$ref": "#/definitions/responses.LocationInfo"
+                },
+                "numberOfUsers": {
+                    "description": "Number of users currently on the access point.",
+                    "type": "integer"
+                },
+                "operationStatus": {
+                    "$ref": "#/definitions/responses.OperationStatus"
+                },
+                "resourceURL": {
+                    "description": "Self referring URL",
+                    "type": "string"
+                },
+                "timezone": {
+                    "description": "Time zone of access point.",
+                    "type": "string"
+                }
+            }
+        },
+        "responses.AccessPointInfoList": {
+            "type": "object",
+            "properties": {
+                "accessPoint": {
+                    "description": "Collection of the access point information list.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/responses.AccessPointInfo"
+                    }
+                },
+                "resourceURL": {
+                    "description": "Self referring URL",
+                    "type": "string"
+                },
+                "zoneId": {
+                    "description": "Identifier of zone",
+                    "type": "string"
+                }
+            }
+        },
+        "responses.AccessPointList": {
+            "type": "object",
+            "properties": {
+                "accessPointList": {
+                    "$ref": "#/definitions/responses.AccessPointInfoList"
+                }
+            }
+        },
+        "responses.AnAccessPointInfo": {
+            "type": "object",
+            "properties": {
+                "accessPointInfo": {
+                    "$ref": "#/definitions/responses.AccessPointInfo"
+                }
+            }
+        },
+        "responses.ConnectionType": {
+            "type": "string",
+            "enum": [
+                "LTE",
+                "Wifi",
+                "Wimax",
+                "5G NR",
+                "UNKNOWN"
+            ],
+            "x-enum-varnames": [
+                "CT_LTE",
+                "CT_WIFI",
+                "CT_WIMAX",
+                "CT_NR5G",
+                "CT_UNKNOWN"
+            ]
+        },
+        "responses.LocationInfo": {
+            "type": "object",
+            "properties": {
+                "altitude": {
+                    "description": "Location altitude relative to the WGS84 ellipsoid surface.",
+                    "type": "number"
+                },
+                "latitude": {
+                    "description": "Location latitude, expressed in the range -90° to +90°. Cardinality greater than one only if \\\"shape\\\" equals 7.",
+                    "type": "array",
+                    "items": {
+                        "type": "number"
+                    }
+                },
+                "longitude": {
+                    "description": "Location longitude, expressed in the range -180° to +180°. Cardinality greater than one only if \\\"shape\\\" equals 7.",
+                    "type": "array",
+                    "items": {
+                        "type": "number"
+                    }
+                },
+                "shape": {
+                    "description": "Shape information, as detailed in [14], associated with the reported location coordinate:\n\t1 = Ellipsoid_Arc\n\t2 = ellipsoid_Point\n\t3 = ellipsoid_Point_Altitude\n\t4 = ellipsoid_Point_Altitude_Uncert_Ellipsoid\n\t5 = ellipsoid_Point_Uncert_Circle\n\t6 = ellipsoid_Point_Uncert_Ellipse\n\t7 = polygon",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/responses.LocationInfoShape"
+                        }
+                    ]
+                }
+            }
+        },
+        "responses.LocationInfoShape": {
+            "type": "integer",
+            "enum": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7
+            ],
+            "x-enum-varnames": [
+                "LocationInfoShapeN1",
+                "LocationInfoShapeN2",
+                "LocationInfoShapeN3",
+                "LocationInfoShapeN4",
+                "LocationInfoShapeN5",
+                "LocationInfoShapeN6",
+                "LocationInfoShapeN7"
+            ]
+        },
+        "responses.OperationStatus": {
+            "type": "string",
+            "enum": [
+                "Serviceable",
+                "Unserviceable",
+                "UNKNOWN"
+            ],
+            "x-enum-varnames": [
+                "OS_SERVICEABLE",
+                "OS_UNSERVICEABLE",
+                "OS_UNKNOWN"
+            ]
+        },
+        "responses.ProblemDetails": {
+            "type": "object",
+            "properties": {
+                "detail": {
+                    "description": "Type of the problem, typically a URI that identifies the problem type",
+                    "type": "string"
+                },
+                "status": {
+                    "description": "Instance string `json:\"instance,omitempty\"`",
+                    "type": "integer"
+                }
+            }
+        },
+        "responses.TerminalDistance": {
+            "type": "object",
+            "properties": {
+                "accuracy": {
+                    "description": "Accuracy Accuracy of the provided distance in meters",
+                    "type": "integer"
+                },
+                "distance": {
+                    "description": "Distance Distance from terminal to a location or between two terminals specified in meters",
+                    "type": "integer"
+                },
+                "timestamp": {
+                    "$ref": "#/definitions/responses.TimeStamp"
+                }
+            }
+        },
+        "responses.TimeStamp": {
+            "type": "object",
+            "properties": {
+                "nanoSeconds": {
+                    "description": "The nanoseconds part of the time.",
+                    "type": "integer"
+                },
+                "seconds": {
+                    "description": "The seconds part of the time. Time is defined as Unix-time since January 1, 1970, 00:00:00 UTC.",
+                    "type": "integer"
+                }
+            }
+        },
+        "responses.UserInfo": {
+            "type": "object",
+            "properties": {
+                "AccessPointId": {
+                    "description": "AccessPointId The identity of the access point the user is currently on, see note 1.",
+                    "type": "string"
+                },
+                "address": {
+                    "description": "Address Address of user (e.g. 'sip' URI, 'tel' URI, 'acr' URI) currently on the access point, see note 1.",
+                    "type": "string"
+                },
+                "ancillaryInfo": {
+                    "description": "AncillaryInfo Reserved for future use.",
+                    "type": "string"
+                },
+                "locationInfo": {
+                    "description": "Location of the User",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/responses.LocationInfo"
+                        }
+                    ]
+                },
+                "resourceURL": {
+                    "description": "ResourceURL Self-referring URL, see note 1.",
+                    "type": "string"
+                },
+                "timestamp": {
+                    "description": "Date and time that location was collected.",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/responses.TimeStamp"
+                        }
+                    ]
+                },
+                "zoneId": {
+                    "description": "ZoneId The identity of the zone the user is currently within, see note 1.",
+                    "type": "string"
+                }
+            }
+        },
+        "responses.UserInfoList": {
+            "type": "object",
+            "properties": {
+                "resourceURL": {
+                    "description": "ResourceURL Self-referring URL, see note 1.",
+                    "type": "string"
+                },
+                "user": {
+                    "description": "User List of users, see note 1.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/responses.UserInfo"
+                    }
+                }
+            }
+        },
         "responses.ZoneInfo": {
             "type": "object",
             "properties": {
@@ -91,15 +746,25 @@
                 }
             }
         },
-        "responses.ZoneList": {
+        "responses.ZoneInfoList": {
             "type": "object",
             "properties": {
+                "resourceURL": {
+                    "type": "string"
+                },
                 "zone": {
-                    "description": "List of zones",
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/responses.ZoneInfo"
                     }
+                }
+            }
+        },
+        "responses.ZoneList": {
+            "type": "object",
+            "properties": {
+                "zoneList": {
+                    "$ref": "#/definitions/responses.ZoneInfoList"
                 }
             }
         }

@@ -2,6 +2,7 @@ package routes
 
 import (
 	"github.com/gin-gonic/gin"
+	// Swagger docs
 	_ "github.com/izacarias/lapi/docs" // This line is necessary for go-swagger to find your docs!
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"

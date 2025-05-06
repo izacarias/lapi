@@ -11,6 +11,20 @@ import (
 	"github.com/izacarias/lapi/utils"
 )
 
+// ListUsers godoc
+// @Summary Query location information about a specific UE or a group of UEs
+// @Description The GET method is used to query location information about a specific UE or a group of Ues.
+// @Id usersGET
+// @Tags location
+// @Produce json
+// @Param zoneId query []string false "Zone ID" collectionFormat(multi)
+// @Param accessPointId query []string false "Access Point ID" collectionFormat(multi)
+// @Param address query []string false "User address" collectionFormat(multi)
+// @Success 200 {object} responses.UserInfoList
+// @Failure 400 {object} responses.ProblemDetails "Bad Request"
+// @Failure 404 {object} responses.ProblemDetails "User Not Found"
+// @Failure 500 {object} responses.ProblemDetails "Internal Server Error"
+// @Router /queries/users [get]
 func ListUsers() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		qsZones := c.QueryArray("zoneId")

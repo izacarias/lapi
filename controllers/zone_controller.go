@@ -12,10 +12,10 @@ import (
 )
 
 // ListZones godoc
-// @Tags location
-// @Summary Query the information about one or more specific zones or a list of zones.
+// @Summary Retrieves information about one or more specific zones or a list of zones.
 // @Description The GET method is used to query the information about one or more specific zones or a list of zones.
 // @Id zonesGET
+// @Tags location
 // @Produce json
 // @Param zoneId query []string false "Zone ID"
 // @Success 200 {object} responses.ZoneList
@@ -60,10 +60,10 @@ func ListZones() gin.HandlerFunc {
 }
 
 // GetZone godoc
-// @Tags location
 // @Summary Query information about a specific zone
 // @Description The GET method is used to query the information about a specific zone.
 // @Id zoneGetById
+// @Tags location
 // @Produce json
 // @Param	zoneId	path	string	true	"Zone ID"
 // @Success	200 {object}	responses.ZoneInfo

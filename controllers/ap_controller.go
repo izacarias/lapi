@@ -11,6 +11,18 @@ import (
 	"github.com/izacarias/lapi/utils"
 )
 
+// ListAccessPoints godoc
+// @Summary Query information about a specific access point or a list of access points under a zone
+// @Description The GET method is used to query the information about a specific access point or a list of access points under a zone.
+// @Id accessPointsGET
+// @Tags location
+// @Produce json
+// @Param id path string true "Zone ID"
+// @Success 200 {object} responses.AccessPointList
+// @Failure 400 {object} responses.ProblemDetails "Bad Request"
+// @Failure 404 {object} responses.ProblemDetails "Zone Not Found"
+// @Failure 500 {object} responses.ProblemDetails "Internal Server Error"
+// @Router /queries/zones/{id}/accessPoints [get]
 func ListAccessPoints() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		zoneId := c.Param("id")
@@ -31,7 +43,6 @@ func ListAccessPoints() gin.HandlerFunc {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "error fetching zone"})
 			return
 		}
-		// TODO: add the location info to the response
 		apsResponse := make([]responses.AccessPointInfo, 0)
 		for _, ap := range aps {
 			apsResponse = append(apsResponse, responses.AccessPointInfo{
@@ -59,6 +70,20 @@ func ListAccessPoints() gin.HandlerFunc {
 	}
 }
 
+// GetAccessPoint godoc
+// @Summary Query information about a specific access point under a zone.
+// @Description The GET method is used to query the information about a specific access point under a zone.
+// @Id accessPointGetById
+// @Tags location
+// @Produce json
+// @Param id path string true "Zone ID"
+// @Param apId path string false "Access Point ID"
+// @Success 200 {object} responses.AnAccessPointInfo
+// @Failure 400 {object} responses.ProblemDetails "Bad Request"
+// @Failure 404 {object} responses.ProblemDetails "Zone Not Found"
+// @Failure 404 {object} responses.ProblemDetails "Access Point Not Found"
+// @Failure 500 {object} responses.ProblemDetails "Internal Server Error"
+// @Router /queries/zones/{id}/accessPoints/{apId} [get]
 func GetAccessPoint() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		zoneId := c.Param("id")

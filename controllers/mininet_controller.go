@@ -27,6 +27,18 @@ type mininetApLocationUpdate struct {
 	Timestamp int     `json:"timestamp"`
 }
 
+// UpdateUserLocation godoc
+// @Summary Update the location of a user with data from Mininet
+// @Description The POST method is used to update the location of a user
+// @Id updateMnUserLocationPOST
+// @Tags mininet
+// @Accept json
+// @Produce json
+// @Param location body mininetUserLocationUpdate true "User Location Update"
+// @Success 200 {object} string "Location updated successfully"
+// @Failure 400 {object} responses.ProblemDetails "Bad Request"
+// @Failure 500 {object} responses.ProblemDetails "Internal Server Error"
+// @Router /mininet/location [post]
 func UpdateUserLocation() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		// Parse the JSON request body
@@ -50,6 +62,18 @@ func UpdateUserLocation() gin.HandlerFunc {
 	}
 }
 
+// UpdateAPLocation godoc
+// @Summary Update the location of an access point with data from Mininet
+// @Description The POST method is used to update the location of an access point
+// @Id updateMnAPLocationPOST
+// @Tags mininet
+// @Accept json
+// @Produce json
+// @Param location body mininetApLocationUpdate true "Access Point Location Update"
+// @Success 200 {object} string "Location updated successfully"
+// @Failure 400 {object} responses.ProblemDetails "Bad Request"
+// @Failure 500 {object} responses.ProblemDetails "Internal Server Error"
+// @Router /mininet/aplocation [post]
 func UpdateAPLocation() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		// Parse the JSON request body
