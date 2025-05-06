@@ -9,6 +9,10 @@ This API provides location services for Mobile Edge Computing applications.
 ![Go](https://img.shields.io/badge/-Go-00ADD8?style=flat&logo=go&logoColor=white)
 ![Docker Compose](https://img.shields.io/badge/Docker%20Compose-2496ED?style=flat&logo=docker&logoColor=white)
 
+## Acknowledgment
+
+This work was supported by the German Federal Ministry of Education and Research (BMBF) project [6G-ANNA](https://6g-anna.de/), grant agreement number 16KISK100.
+
 ## Features
 
 - Zone management and queries
@@ -158,7 +162,3 @@ Iulisloi Zacarias
 - [@izacarias at GitHub](https://github.com/izacarias)
 
 Project Link: [https://github.com/izacarias/lapi](https://github.com/izacarias/lapi)
-
-## Acknowledgment
-
-This work was supported by the German Federal Ministry of Education and Research (BMBF) project [6G-ANNA](https://6g-anna.de/), grant agreement number 16KISK100.
