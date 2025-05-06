@@ -105,15 +105,6 @@ You can test the API endpoints using:
 2. Swagger UI at `/docs`
 3. Any HTTP client (like Postman or cURL)
 
-## API Endpoints
-
-- `GET /ping` - Health check
-- `GET /location/v3/queries/zones` - List all zones
-- `GET /location/v3/queries/zones/{zoneId}` - Get zone by ID
-- `GET /location/v3/queries/zones/{zoneId}/accessPoints` - List access points in a zone
-- `GET /location/v3/queries/users` - Query users with various filters
-- `GET /location/v3/queries/distance` - Calculate distances between points
-
 ## Development
 
 ### Update Swagger Documentation
@@ -126,14 +117,20 @@ swag init -g main.go --output docs/swagger
 
 ```
 .
-├── configs/         # Configuration and database setup
-├── docs/           # Swagger documentation
-├── handlers/       # HTTP request handlers
-├── models/         # Data models
-├── repositories/   # Data access layer
-├── routes/         # Route definitions
-├── tests/         # Test files
-└── docker/        # Docker-related files
+├── configs/            # Utility functions to get configuration values
+├── controllers         # Controllers to receive and route the requests
+├── docs/               # Swagger generated documentation files
+├── domain/             # Entitites and data models
+├── mock/               # Functions to insert mock data into database
+├── responses/          # Definition of objects used in responses as JSON
+├── routes/             # Route definitions
+├── services/           # Coupling between domain entities (WIP!)
+├── tests/              # Test files
+├── utils/              # Utility functions
+...
+├── docker-compose.yml  # Docker-related files
+├── Dockerfile          # Docker-related files
+
 ```
 
 ## License
