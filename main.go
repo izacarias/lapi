@@ -45,5 +45,5 @@ func main() {
 	routes.SwaggerRoute(router)
 
 	// Running the server
-	router.Run("192.168.124.1:8080")
+	router.Run(":8080")
 }

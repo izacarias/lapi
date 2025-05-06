@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    container_name: lapi
+    ports:
+      - "8080:8080"
+    environment:
+      - MONGOURI=${MONGODB_URI:-mongodb://mongodb:27017/lapi}
+      - APIROOT=${APIROOT:-http://localhost:8080}
+      - APIVERSION=${APIVERSION:-v3}
+      - PURGEDATABASE=${PURGEDATABASE:-1}
+      - INSERTMOCKDATA=${INSERTMOCKDATA:-1}
+    depends_on:
+      - mongodb
+    networks:
+      - lapi-network
+
+  mongodb:
+    image: mongodb/mongodb-community-server:7.0.7-ubuntu2204
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    networks:
+      - lapi-network
+
+networks:
+  lapi-network:
+    driver: bridge
