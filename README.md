@@ -3,6 +3,9 @@
 A partial implementation of ETSI GS MEC 013 Location API specification. 
 This API provides location services for Mobile Edge Computing applications.
 
+![GitHub last commit](https://img.shields.io/github/last-commit/izacarias/lapi)
+![GitHub top language](https://img.shields.io/github/languages/top/izacarias/lapi)
+
 ## Features
 
 - Zone management and queries
