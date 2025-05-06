@@ -1,77 +1,155 @@
-Based on: https://dev.to/hackmamba/build-a-rest-api-with-golang-and-mongodb-gin-gonic-version-269m
+# Location API (LAPI)
 
-# Requirements
+A partial implementation of ETSI GS MEC 013 Location API specification. 
+This API provides location services for Mobile Edge Computing applications.
 
-## MongoDB
+## Features
 
-The easy way to run MongoDB for this project is through Docker or Podman
+- Zone management and queries
+- Access point information
+- User location tracking
+- Distance calculations
+- Swagger documentation
+- RESTful API endpoints
 
-### Docker
+## Prerequisites
 
-    ```
-    docker run --name mongodb -p 27017:27017 -d mongodb/mongodb-community-server:latest
-    ```
+- Go 1.23.3 or higher
+- MongoDB (v7.0)
+- Docker (optional)
+- Docker Compose (optional)
+
+## Quick Start with Docker Compose
+
+The easiest way to run the application is using Docker Compose:
+
+```bash
+docker compose up -d
+```
+
+his will start both the API service and MongoDB. The API will be available at:
+- API: http://localhost:8080
+- Ping Endpoint: http://localhost:8080/ping
+- Swagger UI: http://localhost:8080/docs
+
+## Running Locally
+
+### 1. Environment Setup
+
+Create a `.env` file in the project root:
+
+```env
+MONGOURI=mongodb://localhost:27017/lapi
+APIROOT=http://localhost:8080
+APIVERSION=v3
+PURGEDATABASE=1
+INSERTMOCKDATA=1
+```
+### 2. Start MongoDB
+
+Using Docker:
+```bash
+docker run --name mongodb -p 27017:27017 -d mongodb/mongodb-community-server:latest
+```
+
+Or using Podman:
+```bash
+podman run --name mongodb --privileged -p 27017:27017 -d docker.io/mongodb/mongodb-community-server:latest
+```
 
 or if is was already initialized
 
-    ```
-    docker start mongodb
-    ```
+```bash
+docker start mongodb
+```
 
-### Podman (another option to run containers)
+or 
 
-**Pull the MongoDB image from registy**
+```bash
+podman start mongodb
+```
 
-    ```
-    podman pull docker.io/mongodb/mongodb-community-server:latest
-    ```
+### 3. Run the Application
 
-**Run the server as a container**
+```bash
+go run main.go
+```
 
-    ```
-    podman run --name mongodb --privileged -p 27017:27017 -d docker.io/mongodb/mongodb-community-server:latest
-    ```
+## API Documentation
 
-**If you want to persist data**
+The API documentation is available through Swagger UI at `/docs` endpoint. You can also find the OpenAPI specification at `/swagger/doc.json`.
 
-    ```
-    mkdir mongodata
-
-    podman run --name mongodb -p 27017:27017 -v ./mongodata:/data/db:rw,U,Z --rm docker.io/mongodb/mongodb-community-server:latest
-    ```
-
-**Attach to a running container**
-    
-    ```
-    podman attach mongodb
-    ```
 > [!Note]
 > Depending on your system, it might require to run podman with root privilleges (e.g., Fedora)
 > This is due to a requirement of MongoDB and the rights to access files in folders. Without the 
 > `sudo` command, SElinux prevents the MondoDB container to write in the filesystem causing an error.
 
-# Testing
+## Testing
 
-The integration tests assume the MongoDB instance is running an is accessible. Please keep in mind that the
-database will be recreated and filled with mock data (make sure that the options `PURGEDATABASE` and 
-`INSERTMOCKDATA` are enabled in the [.env](.env) file).
+### Integration Tests
+
+The integration tests assume the MongoDB instance is running an is accessible. 
+Please keep in mind that the database will be recreated and filled with mock data 
+(make sure that the options `PURGEDATABASE` and  `INSERTMOCKDATA` are enabled in the [.env](.env) file).
 
 Change to the project directory and run the tests as following:
-```
-cd <PROJECT_DIRECTORY>
+
+```bash
 go test -v
 ```
+### Manual Testing
 
-# Development Instructions
+You can test the API endpoints using:
 
-## Update Swagger Specifications
+1. The provided REST Client file in `./tests/Requests.rest`
+2. Swagger UI at `/docs`
+3. Any HTTP client (like Postman or cURL)
 
-    ```
-    swag init -g main.go --output docs/swagger
-    ```
+## API Endpoints
 
-# Running tests
+- `GET /ping` - Health check
+- `GET /location/v3/queries/zones` - List all zones
+- `GET /location/v3/queries/zones/{zoneId}` - Get zone by ID
+- `GET /location/v3/queries/zones/{zoneId}/accessPoints` - List access points in a zone
+- `GET /location/v3/queries/users` - Query users with various filters
+- `GET /location/v3/queries/distance` - Calculate distances between points
 
-For testing purposes, I am using the REST Client extension for VSCode, but any REST Client (Like Postman)
-should help. For the REST Client extension, there is a file with the requests under the `./test` folder 
-called [Requests.rest](./tests/Requests.rest).
+## Development
+
+### Update Swagger Documentation
+
+```bash
+swag init -g main.go --output docs/swagger
+```
+
+### Project Structure
+
+```
+.
+├── configs/         # Configuration and database setup
+├── docs/           # Swagger documentation
+├── handlers/       # HTTP request handlers
+├── models/         # Data models
+├── repositories/   # Data access layer
+├── routes/         # Route definitions
+├── tests/         # Test files
+└── docker/        # Docker-related files
+```
+
+## License
+
+This project is licensed under the Apache 2.0 License - see the [LICENSE](LICENSE) file for details.
+
+## Contributing
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## Contact
+
+Iulisloi Zacarias - [@izacarias](https://github.com/izacarias)
+
+Project Link: [https://github.com/izacarias/lapi](https://github.com/izacarias/lapi)
