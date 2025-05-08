@@ -14,7 +14,25 @@ except ImportError:
 
 LAPI_URL = environ.get('LAPI_URL', 'http://192.168.124.1:8080/mininet')
 
+# Glocal variable to store the state of export_users
+export_users_done = False
+
 class LapiUser:
+    """ Represents a User in the Location API"""
+    def __init__(self, address, access_point):
+        self.address = address
+        self.access_point = access_point
+        
+    def to_dict(self):
+        return {
+            "address": self.address,
+            "access_point": self.access_point
+        }
+    
+    def to_json(self):
+        return json.dumps(self.to_dict)
+
+class LapiUserLocation:
     """
     Represents a user with location information for LAPI integration
     """
@@ -62,7 +80,7 @@ class LapiUser:
         """
         return json.dumps(self.to_dict())
 
-class LapiAP:
+class LapiApLocation:
     """
     Represents an Access Point (AP) with location information for LAPI integration
     """
@@ -126,19 +144,38 @@ def wifi_wrapper(fn):
         except Exception as e:
             print(f"Error sending LAPI request: {e}\n")
             return None
+
+
+    def get_ap_name(node):
+        """ Gets the Access Point name which a node is connected to."""
+        if node.params['wlan'][0]:
+            wintf  = node.getNameToWintf(node.params['wlan'][0])
+            wintf_name = wintf.associatedTo if wintf.associatedTo else None
+            ap_name = str(wintf_name).split('-')[0] if wintf_name else None
+        else: 
+            ap_name = None
+        return ap_name    
     
-    def send_users(net):
-        """Sends user information to the LAPI server"""
-        try:
-            # Get the list of stations and APs
+
+    def export_users(net):
+        """ Export all users (stations) in the Mininet network at the 
+            beggining of the experiment. This function should be called before
+            monitor_locations() and run once. A global variable is used to
+            store the state of this function.
+        """
+        global export_users_done
+        if not export_users_done:
+            export_users_done = True
+            info("*** Exporting users\n")
             nodes = net.get_mn_wifi_nodes()
-            for n in nodes:
-                if isinstance(n, (Station, Car)):
-                    (x, y, z) = n.getxyz()
-                    info(f"Station {n.name} location: {x}, {y}, {z}\n")
-        except Exception as e:
-            print(f"Error in sending users: {e}\n")
-    
+            users = [n for n in nodes if isinstance(n, (Station, Car))]
+            # send the list of users to the server via API
+            for u in users:
+                address = u.params['ip'].split('/')[0]
+                access_point = get_ap_name(u)
+                lapi_post(LAPI_URL + "/users", LapiUser(address, access_point).to_json())
+
+
     def monitor_locations(net, interval=5):
         """Periodically sends location information of stations and APs"""
         
@@ -152,21 +189,19 @@ def wifi_wrapper(fn):
                         if isinstance(n, (Station, Car)):
                             (x, y, z) = n.getxyz()
                             if n.params['wlan'][0]: 
-                                wintf  = n.getNameToWintf(n.params['wlan'][0])
-                                wintf_name = wintf.associatedTo if wintf.associatedTo else None
-                                ap_name = str(wintf_name).split('-')[0] if wintf_name else None
+                                ap_name = get_ap_name(n)
                             else:
                                 ap_name = None
                             # info(f"Station {n.name} (AP: {ap_name}) location: {x}, {y}, {z}\n")
                             # Send user data to LAPI
                             node_ip = n.params['ip'].split('/')[0]
                             # user = LapiUser(n.name, x, y, z, ap_name)
-                            user = LapiUser(node_ip, x, y, z, ap_name)
+                            user = LapiUserLocation(node_ip, x, y, z, ap_name)
                             data = user.to_json()
                             lapi_post(LAPI_URL + "/location", data)
                         if isinstance(n, (AP)):
                             (x, y, z) = n.getxyz()
-                            ap = LapiAP(n.name, x, y, z)
+                            ap = LapiApLocation(n.name, x, y, z)
                             data = ap.to_json()
                             lapi_post(LAPI_URL + "/aplocation", data)
                     time.sleep(interval)
@@ -182,6 +217,9 @@ def wifi_wrapper(fn):
     def result(*args, **kwargs):
         res = fn(*args, **kwargs)
         net = args[0]
+
+        # Export all the users (stations) in the Mininet network
+        export_users(net)
         
         # Add users from Mininet_wifi
         send_users(net)
