@@ -96,8 +96,14 @@ func enrichAccessPointsWithLocation(aps []domain.AccessPoint) []domain.AccessPoi
 
 // getAPLocation retrieves the location for an access point
 func getAPLocation(apId string) *domain.Location {
+	var lr domain.LocationRepository
+	lr, err := domain.NewLocationMongo()
+	if err != nil {
+		log.Printf("error creating location repository: %v", err)
+		return nil
+	}
 	log.Printf("getting location for AP %s", apId)
-	location, err := domain.GetLocation(domain.TYPE_AP, apId)
+	location, err := lr.GetLast(domain.TYPE_AP, apId)
 	if err != nil {
 		log.Printf("error getting location for AP %s: %v", apId, err)
 	}
