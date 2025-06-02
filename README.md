@@ -37,7 +37,7 @@ The easiest way to run the application is using Docker Compose:
 docker compose up -d
 ```
 
-his will start both the API service and MongoDB. The API will be available at:
+This will start both the API service and MongoDB. The API will be available at:
 - API: http://localhost:8080
 - Ping Endpoint: http://localhost:8080/ping
 - Swagger UI: http://localhost:8080/docs
@@ -142,6 +142,29 @@ swag init -g main.go --output docs/swagger
 ├── Dockerfile          # Docker-related files
 
 ```
+
+## Integration with MininetWifi
+- Install Mininet-Wifi according to the official documentation available in 
+  [GitHub](https://github.com/intrig-unicamp/mininet-wifi?tab=readme-ov-file#installation)
+- Get the [mobility.py](/utils/mininet/mobility.py) and [lapi.py](/utils/mininet/lapi.py) files from this repository
+  - Create a folder in your home directory in the machine where Mininet-Wifi was installed
+  - Download the files
+  - Execute the Mininet-Wifi emulation scenarion
+
+```
+cd ~
+mkdir lapi-integration
+cd ~/lapi-integration
+curl -XGET https://raw.githubusercontent.com/izacarias/lapi/refs/heads/main/utils/mininet/lapi.py -o lapi.py
+curl -XGET https://raw.githubusercontent.com/izacarias/lapi/refs/heads/main/utils/mininet/mobility.py -o mobility.py
+sudo mn -c && sudo ./mobility
+
+```
+
+
+> [!Note]
+> If you are using a Virtual Machine to run Mininet-Wifi, make sure that the machine can acccess
+> the LAPI service (You can use the Ping Endpoint for testing http://LAPI_IP/:8080/ping)
 
 ## License
 
