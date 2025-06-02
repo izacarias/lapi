@@ -245,8 +245,6 @@ func insertUserData(client *mongo.Client) {
 		domain.UserMongo{Address: "192.168.1.6", AccessPoint: "ap2"},
 		domain.UserMongo{Address: "192.168.1.7", AccessPoint: "ap1"},
 		domain.UserMongo{Address: "192.168.1.8", AccessPoint: "ap1"},
-		domain.UserMongo{Address: "10.0.0.2", AccessPoint: "ap1"},
-		domain.UserMongo{Address: "10.0.0.3", AccessPoint: "ap1"},
 	}
 
 	insertCollectionData(client, usersCollection, mockData, "users")
