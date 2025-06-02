@@ -21,6 +21,15 @@ func GetAllUsers() ([]domain.User, error) {
 	return users, nil
 }
 
+func InsertUser(user *domain.User) error {
+	err := domain.InsertUser(user)
+	if err != nil {
+		log.Printf("error inserting user %s: %v", user.GetAddress(), err)
+		return err
+	}
+	return nil
+}
+
 func GetUserByAddress(address string) (*domain.User, error) {
 	user, err := domain.GetUserByAddress(address)
 	if err != nil {

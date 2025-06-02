@@ -76,3 +76,21 @@ func UpdateUser(user *User) error {
 	_, err := userCollection.UpdateOne(context.TODO(), filter, update)
 	return err
 }
+
+func InsertUser(user *User) error {
+	filter := bson.M{"address": user.Address}
+	count, err := userCollection.CountDocuments(context.TODO(), filter)
+	if err != nil {
+		return err
+	}
+	if count > 0 {
+		return nil // User already exists
+	}
+
+	userMongo := UserMongo{
+		Address:     user.Address,
+		AccessPoint: user.AccessPoint,
+	}
+	_, err = userCollection.InsertOne(context.TODO(), userMongo)
+	return err
+}

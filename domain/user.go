@@ -13,6 +13,15 @@ type User struct {
 	Location    *Location
 }
 
+func NewUser() *User {
+	return &User{
+		Address:     "",
+		AccessPoint: "",
+		ZoneId:      "",
+		Location:    NewLocation(),
+	}
+}
+
 // GetAddress returns the user's address
 func (u *User) GetAddress() string {
 	return u.Address
