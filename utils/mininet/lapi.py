@@ -30,12 +30,12 @@ class LapiUser:
         
     def to_dict(self):
         return {
-            "address": self.address,
-            "access_point": self.access_point
+            "userid": self.address,
+            "apname": self.access_point
         }
     
     def to_json(self):
-        return json.dumps(self.to_dict)
+        return json.dumps(self.to_dict())
 
 class LapiUserLocation:
     """
@@ -243,9 +243,7 @@ def wifi_wrapper(fn):
         export_users(net)
         # Export all the Access Points (APs) in the Mininet network
         export_aps(net)
-        
-        # Add users from Mininet_wifi
-        send_users(net)
+
         # Start location monitoring with default 5-second interval
         # (can be adjusted by setting LOCATION_INTERVAL env var)
         interval = int(environ.get('LOCATION_INTERVAL', '1'))
