@@ -21,6 +21,8 @@ def topology(args):
     sta2 = net.addStation('sta2', mac='00:00:00:00:00:03', ip='10.0.0.3/8')
     ap1 = net.addAccessPoint('ap1', ssid='new-ssid', mode='g', channel='1',
                              position='45,40,0')
+    ap2 = net.addAccessPoint('ap2', ssid='new-ssid', mode='g', channel='1',
+                             position='100,40,0')
     c1 = net.addController('c1')
 
     info("*** Configuring propagation model\n")
@@ -46,13 +48,13 @@ def topology(args):
         p1 = {'position': '40.0,30.0,0.0'}
         p2 = {'position': '40.0,40.0,0.0'}
         p3 = {'position': '31.0,10.0,0.0'}
-        p4 = {'position': '55.0,31.0,0.0'}
+        p4 = {'position': '115.0,31.0,0.0'}
 
     net.mobility(sta1, 'start', time=1, **p1)
     net.mobility(sta2, 'start', time=2, **p2)
     net.mobility(sta1, 'stop', time=60, **p3)
     net.mobility(sta2, 'stop', time=40, **p4)
-    net.stopMobility(time=120)
+    net.stopMobility(time=60)
 
     info("*** Starting network\n")
     net.build()
@@ -67,5 +69,5 @@ def topology(args):
 
 
 if __name__ == '__main__':
-    setLogLevel('info')
+    setLogLevel('debug')
     topology(sys.argv)
