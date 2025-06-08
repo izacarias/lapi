@@ -11,7 +11,21 @@ This API provides location services for Mobile Edge Computing applications.
 
 ## Acknowledgment
 
-This work was supported by the German Federal Ministry of Education and Research (BMBF) project [6G-ANNA](https://6g-anna.de/), grant agreement number 16KISK100.
+This work was partially supported by the German Federal Ministry of Education and Research (BMBF) project [6G-ANNA](https://6g-anna.de/), grant agreement number 16KISK100.
+
+<picture>
+  <source
+    srcset="https://6g-anna.de/wp-content/uploads/2023/01/6G-ANNA_icon.png"
+    media="(orientation: portrait)" />
+  <img src="https://6g-anna.de/wp-content/uploads/2023/01/6G-ANNA_icon.png" alt="Logo of 6G-ANNA Project" height="100" />
+</picture>
+<picture>
+  <source
+    srcset="https://6g-anna.de/wp-content/uploads/2020/04/bmbfcolor.png"
+    media="(orientation: portrait)" />
+  <img src="https://6g-anna.de/wp-content/uploads/2020/04/bmbfcolor.png" alt="Logo of BMBF" height="100" />
+</picture>
+
 
 ## Features
 
